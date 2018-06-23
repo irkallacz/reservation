@@ -1,0 +1,36 @@
+{block content}
+
+	<h1 n:block="title">Profil pacienta</h1>
+
+	<table>
+		<tr><th>Příjmení</th><td>{$person->surname}</td></tr>
+		<tr><th>Jméno</th><td>{$person->name}</td></tr>
+		<tr><th>RČ</th><td>{$person->rc}</td></tr>
+		<tr><th>Email</th><td>{$person->mail}</td></tr>
+		<tr><th>Telefon</th><td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td></tr>
+		<tr><th>Adresa</th><td>{$person->address}</td></tr>
+	</table>
+
+	{*<p><a n:href="edit $person->id">Upravit osobní údaje</a></p>*}
+
+	<h2>Skupiny</h2>
+	<ul n:inner-foreach="$person->groups as $group">
+		<li n:class="$group->active ? old">{$group->title} {*<a n:href="groupLogOut $group->id">Odepsat</a>*}</li>
+	</ul>
+
+	{*<p><a n:href="groupLogIn">Zapsat se do skupiny</a></p>*}
+
+	<h2>Žádosti o prohlídku</h2>
+	{if $person->visitRequest}
+		<p n:class="$request->active ? old">{$request->active ? Aktivní : Neaktiví} žádost na vyšetření od {$request->dateStart|date:'d.m.Y'} do {$request->dateEnd|date:'d.m.Y'}
+			ve dnech: {$request->getDaysInString()}. {*<a n:href="visitRequest">Upravit žádost</a>.*}</p>
+	{/if}
+
+	<h2>Rezervace</h2>
+	<ol n:inner-foreach="$person->visits as $visit">
+		<li n:class="$visit->isOver ? old">{$visit->dateStart|date:'d.m.Y H:i'} {if !$visit->isOver}{*<a n:href="Reservation:logOut">Zrušit</a>*}{/if}</li>
+	</ol>
+
+	<p><i>Poslední aktivita: {$person->dateUpdate|date:'%d.%m.%Y %H:%M'}</i><p>
+
+{/block}

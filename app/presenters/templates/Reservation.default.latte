@@ -1,0 +1,73 @@
+{block head}
+    <style type="text/css">
+        .event { display: block; overflow: hidden; position: absolute; height: 1.5em;}
+        .day { width: 100%; position: relative; height: 1.5em;}
+        .exam { color: black; background-color: red; border: 1px solid black; text-align: center;}
+        .exam.open { background-color: #bace29; }
+        .exam.old, .admin .exam.full.old { background-color: gray; }
+        .exam.current { background-color: #006aeb; color: white;}
+        h3 { margin: 0; font-weight: normal; font-size: smaller; }
+        .event a { text-decoration: none;}
+		.exam sup, #groups .number { background-color: black; color: white; padding: 0 0.5ex;}
+		.exam sup { position: absolute; left: 85%; top: 0; font-size: 8px;}
+		#groups { list-style-type: none;}
+    </style>
+{/block}
+
+{block content}
+    <h1 n:block="title">Rezervace vyšetření</h1>
+
+    {if $term}
+        <p>Aktuálně máte rezervovaný termín na <b>{$term->dateStart|date:'%A %d.%m.%Y v %H:%M'|lower}</b>.</p>
+        <p n:if="($term->canLogOut)" class="center"><a n:href="logOut">Zrušit tento termín</a></p>
+
+		<h2>Detaily vyšetření</h2>
+		<p>Pokud chtete upřesnit <a href="https://sportovnimedicina.tul.cz/sluzby" target="_blank">typ vyšetření</a> nebo zanechat nějakou poznámku, můžete je vyplnit níže.</p>
+		{control visitForm}
+{else}
+
+		<p>Cca týden předem si můžete rezervovat jakýkoliv neobsazený termín.
+			Stejně tak můžete zrušit svoji rezervaci maximálně týden předem.
+			V akutních případech nám můžete napsat na náš e-mail nebo zavolat.<p>
+
+		<p>Aktuálně nemáte rezervovaný žádný termín.</p>
+    {/if}
+
+	<h2>Termíny</h2>
+
+    <div id="calendar">
+    {foreach $days as $day => $visits}
+		{var $day = new DateTime($day)}
+		{if $iterator->first} {var $lastDay = $day} {elseif $day->format('W') != $lastDay->format('W')} {var $lastDay = $day} <br>{/if}
+		<div class="days">
+            <div class="day">
+                <h3 class="event" style="width: 20%; left: 0">{$day|date:'%a %d.%m.%Y'}</h3>
+                {foreach $visits as $visit}
+                    <div n:class="exam, event, $visit->open ? open, ($visit->isOver) ? old, ($visit->person) ? full, $visit->person == $person ? current"
+                            title="Přihlášení / odhlášení do {$visit->dateLimit|date:'d.m.Y H:i'}"
+                            style="left: {$visit->position|number:1:'.':' '|noescape}%; width: {$visit->length|number:1:'.':' '|noescape}%;">
+                        <a n:href="logIn $visit->id" n:tag-if="$visit->canLogIn" class="confirm"
+                           data-message="Opravdu chcete rezervovat termín na {$visit->dateStart|date:'d.m.Y \v H:i'}?{if $term}&#10;Máte rezervovaný termín na {$term->dateStart|date:'d.m.Y H:i'}.{/if}"
+                           title="Zarezervovat {$visit->dateStart->format('d.m.Y H:i')}-{$visit->dateEnd->format('H:i')}">
+							{$visit->dateStart->format('H:i')}
+                        </a>
+						<a n:if="$visit->group" title="{$visit->group->title}" href="#group-{$visit->group->id}"><sup>{$visit->group->id}</sup></a>
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+    {/foreach}
+    </div>
+
+	<script type="application/javascript" src="{$basePath}/js/confirm.js"></script>
+
+	{if}
+	<h2>Vaše skupiny</h2>
+	<ul id="groups">
+		<li n:foreach="$groups as $id => $group" id="group-{$id}"> <span class="number">{$id}</span> {$group->title}</li>
+	</ul>
+	{/if isset($group)}
+
+	<p n:if="!$term">Nenašli jste volný termín který by vám vyhovoval? Zaregistrujte se na jako <a n:href="Profile:volunteer">náhradník</a>.</p>
+
+{/block}

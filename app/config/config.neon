@@ -1,0 +1,60 @@
+parameters:
+
+dbal:
+	driver: mysqli
+	host: localhost
+	database: rezervace
+	username: root
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+extensions:
+	dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
+	orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
+	nextras.form: Nextras\Forms\Bridges\NetteDI\FormsExtension
+	console: Contributte\Console\DI\ConsoleExtension
+	migrations: Nextras\Migrations\Bridges\NetteDI\MigrationsExtension
+
+migrations:
+	dir: %appDir%/../migrations
+	driver: mysql
+	dbal: nextras
+
+php:
+	date.timezone: Europe/Prague
+
+orm:
+	model: App\Model\Orm
+
+mail:
+	smtp: true
+	host: smtp.tul.cz
+	port: 465
+	username:
+	password:
+	secure: ssl
+
+routing:
+    cache: true
+
+console:
+	catchExceptions: true
+	autoExit: false
+	url: https://contributte.com
+
+services:
+	router: App\RouterFactory::createRouter
+
+	userAuthenticator:
+		factory: App\Model\UserAuthenticator
+		autowired: self
+
+	adminAuthenticator:
+		factory: App\Model\AdminAuthenticator
+		autowired: self
+
+	- App\Console\VisitReminderCommand
+	- App\Console\VisitRequestCommand

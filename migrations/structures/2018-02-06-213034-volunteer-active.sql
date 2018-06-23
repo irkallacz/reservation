@@ -1,0 +1,1 @@
+ALTER TABLE `volunteers` ADD `active` tinyint(1) NOT NULL DEFAULT '1' AFTER `date_end`, CHANGE `days` `days` tinyint unsigned NOT NULL AFTER `active`;

@@ -1,0 +1,68 @@
+{block head}
+<script src="{$basePath}/js/jquery-1.11.3.min.js"></script>
+<script src="{$basePath}/js/jquery.dataTables.min.js"></script>
+<style type="text/css">
+    table { border-collapse: collapse; }
+    table, table td, table th { border: 1px solid gray; padding: 1px 5px;}
+    table tr:nth-child(2n) td { background-color: azure;}
+    table th.sorting_asc { text-decoration: underline;}
+    table th.sorting_desc { text-decoration: overline;}
+    table thead tr th { background-color: #3484d2; color: white;}
+    .dataTables_filter { margin-bottom: 1em;}
+    .dataTables_filter label { font-weight: bold}
+    .hidden { display: none; }
+    .nonactive { color: gray; }
+</style>
+<script type="application/javascript">
+//    $(document).ready(function() {
+//        $('.persons').DataTable( {
+//            "paging": false, "info": false
+//        } );
+//    } );
+</script>
+{/block}
+
+{block content}
+    <h1 n:block="title">Seznam přihlášených</h1>
+    {foreach $groups as $group}
+        <h2 n:class="$group->active ? active : nonactive">{$group->title}</h2>
+
+        <table n:class="persons, $group->active ? active : nonactive">
+        <thead>
+            <tr>
+				<th>Příjmení</th><th>Jméno</th>
+				<th n:if="$user->isInRole('admin')">RC</th>
+				<th>Email</th>
+				<th>Termín</th>
+				<th>Aktivita</th></tr>
+        </thead>
+        <tbody>
+            {foreach $group->persons as $person}
+                <tr>
+                    <td>{$person->surname}</td>
+                    <td>{$person->name}</td>
+                    <td n:if="$user->isInRole('admin')">{$person->rc}</td>
+                    <td>{$person->mail}</td>
+                    <td>
+                        {var $term = $person->getNextVisit()}
+                        {if $term}
+                            <span class="hidden">{$term->dateStart|date:'%Y-%m-%d %H:%M'}</span>
+                            <a n:tag-if="$user->isInRole('admin')" n:href="Admin:visit, $term->id">{$term->dateStart|date:'%d.%m.%Y %H:%M'}</a>
+                        {/if}
+                    </td>
+                    <td>
+                        <span class="hidden">{$person->dateUpdate|date:'%Y-%m-%d %H:%M'}</span>
+                        {$person->dateUpdate|date:'%d.%m.%Y %H:%M'}
+                    </td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+    {/foreach}
+
+	{if !isset($group)}
+        <p>Aktuálně nejste zapsaný v žádné skupině</p>
+    {/if}
+
+{/block}

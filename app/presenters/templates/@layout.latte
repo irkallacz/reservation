@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>{ifset title}{include title|striptags} | {/ifset} Centrum sportovní medicíny</title>
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+
+    <script async="async" src="{$basePath}/js/netteForms.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/main.css" media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/print.css" media="print">
+    {block head}
+
+    {/block}
+</head>
+
+<body>
+    <header class="logo greenframe">
+        <a target="_blank" href="http://www.fp.tul.cz">
+            <img id="fp" src="{$basePath}/image/fp.png" alt="Technická univerzita - Fakulta přírodovědně-humanitní a pedagogická">
+        </a>
+        <a href="http://sportovnimedicina.tul.cz">
+            <img id="csm" alt="Centrum sportovní medicíny" src="{$basePath}/image/logo.png">
+        </a>
+    </header>
+
+    <div id="content">
+        <nav class="top-menu">
+            <ul>
+                <li><a {ifCurrent Homepage:default}class="current"{/ifCurrent} n:href="Homepage:">úvod</a></li>
+                {if $user->isLoggedIn()}
+                    <li><a {ifCurrent Reservation:*}class="current"{/ifCurrent} n:href="Reservation:">rezervace</a></li>
+                    <li><a {ifCurrent Reservation:persons}class="current"{/ifCurrent} n:href="Reservation:persons">seznam osob</a></li>
+                    <li><a {ifCurrent Profile:*}class="current"{/ifCurrent} n:href="Profile:">profil</a></li>
+                    <li><a n:href="Sign:logout">odhlásit</li></a>
+                {else}
+                    <li><a {ifCurrent Sign:*}class="current"{/ifCurrent} n:href="Sign:">přihlásit</li></a>
+                {/if}
+            </ul>
+        </nav>
+
+        <ul n:foreach="$flashes as $flash" n:class="flash, $flash->type">
+            <li>{$flash->message}</li>
+        </ul>
+
+        {include content}
+    </div>
+
+    <footer class="greenframe footer">
+        <div class="custom">
+            <p>
+                <strong>Centrum sportovní medicíny</strong><a href="mailto:sportovnimedicina@tul.cz">sportovnimedicina@tul.cz</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

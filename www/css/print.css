@@ -1,0 +1,10 @@
+.top-menu {display: none}
+.logo {text-align: center}
+
+.footer a {float: right}
+
+#fp {float: left}
+#csm {display: none;}
+
+body {font: normal 14px Georgia, "New York CE", utopia, serif;}
+h1 {clear: both}

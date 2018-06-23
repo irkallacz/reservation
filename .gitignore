@@ -1,0 +1,10 @@
+/vendor
+/log
+/temp
+/.idea
+
+/migrations/basic-data/*
+/migrations/dummy-data/*
+
+app/config/config.local.neon
+composer.lock

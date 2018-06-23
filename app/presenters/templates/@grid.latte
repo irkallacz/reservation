@@ -1,0 +1,23 @@
+{define col-phone}
+	<td>
+		{if $cell}{$cell|number:0:'.':' '}{/if}
+	</td>
+{/define}
+
+{define col-dateStart}
+	<td>
+		{$cell|date:'d.m.Y'}
+	</td>
+{/define}
+
+{define col-dateEnd}
+	<td>
+		{$cell|date:'d.m.Y'}
+	</td>
+{/define}
+
+{define col-active}
+	<td class="center">
+		{if $cell}✔{else}✘{/if}
+	</td>
+{/define}

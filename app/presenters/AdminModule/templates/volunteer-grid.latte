@@ -1,0 +1,19 @@
+{layout ../../templates/@grid.latte}
+
+{define col-person}
+	<td>
+		<a href="{plink Patient:view $row->person->id}">{$row->person->surname} {$row->person->name}</a>
+	</td>
+{/define}
+
+{define col-dateAdd}
+	<td>
+		{$cell|date:'d.m.Y H:i'}
+	</td>
+{/define}
+
+{define col-days}
+	<td>
+		{$row->getDaysInString()}
+	</td>
+{/define}

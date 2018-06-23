@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="icon" sizes="any" href="{$baseUri}/image/svg/icon.svg" type="image/svg+xml">
+	<title>{ifset title}{include title|striptags} | {/ifset} Sportan | Centrum sportovní medicíny</title>
+
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/admin.css">
+    <script src="{$basePath}/js/netteForms.min.js"></script>
+	{block head}
+
+    {/block}
+</head>
+
+{define binary}
+	<span n:class="$value ? green : red">{$value ? '✔' : '✖'}{ifset $title} {$value ? $title[1] : $title[0]}{/ifset}</span>
+{/define}
+
+{define svg}<img src="{$basePath}/image/svg/{$name}.svg" alt="{isset($alt) ? $alt : $name}" n:class="svg, isset($class) ? $class">{/define}
+
+<body>
+
+    <div class="header-container">
+        <header class="logo greenframe">
+            <a class="title" id="csm" href="http://rezervace.sportovnimedicina.tul.cz" title="Centrum sportovní medicíny">
+                Centrum sportovní medicíny
+            </a>
+			<a class="title" id="name" n:href="Reservation:" title="Sportovní anamnézy">
+				{include svg name => helmet}Rezervace
+			</a>
+
+			<nav class="top-menu" n:if="$user->isLoggedIn()">
+                <ul>
+                    <li><a {ifCurrent Reservation:*}class="current"{/ifCurrent} n:href="Reservation:">{include svg name => home, class => circle} úvod</a></li>
+                    <li><a {ifCurrent Patient:*}class="current"{/ifCurrent} n:href="Patient:">{include svg name => user, class => circle} pacienti</a></li>
+                    <li><a {ifCurrent Group:*}class="current"{/ifCurrent} n:href="Group:">{include svg name => team, class => circle} skupiny</a></li>
+                    <li><a {ifCurrent Volunteer:*}class="current"{/ifCurrent} n:href="Volunteer:">{include svg name => glass, class => circle} žádosti</a></li>
+                </ul>
+            </nav>
+
+            <a n:if="$user->isLoggedIn()" class="logout" n:href="Sign:out">
+                odhlásit
+            </a>
+
+        </header>
+    </div>
+
+
+    <div id="content">
+        <ul n:foreach="$flashes as $flash" n:class="flash, $flash->type">
+            <li>{$flash->message}</li>
+        </ul>
+
+        {include content}
+    </div>
+
+    <div class="footer-container clearfix">
+        <footer class="greenframe footer">
+            <div class="custom">
+                <p>
+                    <strong>Centrum sportovní medicíny</strong><a href="mailto:sportovnimedicina@tul.cz">sportovnimedicina@tul.cz</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

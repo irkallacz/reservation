@@ -1,0 +1,88 @@
+{block content}
+    <style type="text/css">
+        table { border-collapse: collapse; }
+        table, table td, table th { border: 1px solid gray; padding: 1px 5px;}
+        table tr:nth-child(2n) td { background-color: azure;}
+        table thead tr th { background-color: #3484d2; color: white;}
+    </style>
+
+    <h1>Vítejte</h1>
+
+	<p>Tento web slouží naším pacinetům, kteří si chtějí rezerovovat termín, a také sportovním skupinám, které již u nás mají rezervované termíny, aby si jejich členové mohli vybrat takový
+        datum a čas, který jim vyhovuje.</p>
+
+    <h2>Sportovní prohlídky</h2>
+
+    <p>V principu můžete prohlídku podstoupit u jakéhokoli tělovýchovného lékaře. Ale u nás pro Vás již máme pro jisté skupiny <b>vyhrazené
+        termíny</b>.</p>
+
+	<p><strong>Volné termíny bez skupin: {$freeVisitCount}</strong></p>
+	<p n:if="$freeVisitCount"><strong>Možno rezervovat do: {$firstFreeVisit->dateStart|date:'d.m.Y'}</strong></p>
+
+    <p>Aktuálně u nás mají termíny rezervované tyto skupiny:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Skupina</th>
+                <th>Volných termínu</th>
+                <th>Přihlášení do</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr n:foreach="$groups as $group">
+            <td>{$group->title}</td>
+			<td>{$group->activeVisitsCount}</td>
+			<td>{$group->visitsLimit ? $group->visitsLimit|date:'d.m.Y H:i'}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Co s sebou a tak dále</h2>
+
+    <p>Pokud máte již rezervovaný termín, měli byste dostat pro potvrzení e-mail, ve kterém budou všechny potřebné informace.
+        Ale pro jistotu je uvedeme ještě zde.</p>
+
+    <p><b>Doražte prosím v čas</b> a to tak, abyste v zarezervovaný čas byli už na místě, převlečení a připravení na vyšetření.
+        Sportovní prohlídka bude trvat cca 45 minut.</p>
+
+    <p>Najdete nás na adrese Dubový vrch 714, což je v Harcově, hned vedle fotbalového stadionu.
+        Více informací viz <a target="_blank" href="https://sportovnimedicina.tul.cz/kontakty">mapa</a>.</p>
+
+    <p><b>V případě nezletilých pacientů je třeba, aby s mini po celou dobu prohlídky byl zákonný zástupce nebo jiná pověřená osoba.</b></p>
+
+    <p>Sebou si přineste <b>sportovní oblečení včetně obuvi</b> a vyplněný
+        <b>informovaný souhlas</b>. Ten dostanete mailem nebo si ho můžete <a href="http://sportovnimedicina.tul.cz/images/informovany_souhlas.pdf">stáhnout</a>.
+        Souhlas si zkuste nezapomenout a hlavně ho předem poctivě vyplňte. <b>Veškeré údaje patří vyšetřeovanému pacientovi,
+        pouze podpis zákonnému zástupci.</b></p>
+
+    <p>Obvykle nemáme k dispozici Vaši zdravotní dokumentaci a tak je potřeba všechny problémy napsat do formuláře.
+        V případě, že jste u nás již navštívili, nás zajímají především věci, které se od minule změnily.
+        Pokud si nejste jistí, napište raději všechno.</p>
+
+    <p>Pokud se někde <b>léčíte</b>, nebo pravidelně docházíte na <b>kontroly</b> kvůli nějakému <b>zdravotnímu problému</b>
+        (kardiologie, alergologie, endokrinologie, atd...), doneste sebou také
+        vaši <b>poslední zprávu</b>.</p>
+
+    <p>Slečnám a dívkám doporučujeme sportovní podpsenku.</p>
+
+    <p>Jestliže máte více ochlupený hrudník, je třeba si ho oholit, chlupy vy vadili EKG elektrodám.</p>
+
+    <p>Bylo by dobré jeden až dva dny před prohlídkou nemít intenzívní sportovní trénink ani činnost.
+         Po prohlídce již nedoporučujeme daný den další trénink.</p>
+
+    <p>K dispozici je sprcha, takže pokud si přinesete ručník, můžete se vysprchovat. Velmi důrazně doporučujeme
+        <b>donést si pití</b>, aby se vyrovnala ztráta tekutin během testu.</p>
+
+    <p><b>Cena vyšetření je 1 000 Kč</b>. Pokud zanesete potvzení o zaplacení Vaší zdravotní pojišťovně, může Vám část peněz
+        vrátit zpět, záleží na konkrétní pojištovně a jejich podmínkách.</p>
+
+    <h2>Kontakt</h2>
+    <p>Pokud by jste měli nějaký problém, nebo by Vás zajímali podrobnosti, můžete je najít na 
+    <a href="http://sportovnimedicina.tul.cz/kontakty">našem webu</a>.</p>
+
+    <h2>Zpracování osobních údajů</h2>
+    <p>Návševou u nás souhlasíte se <a n:href="Sign:souhlas">zpracováním Vašich osobních údajů</a>.</p>
+
+
+{/block}

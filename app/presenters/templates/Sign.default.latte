@@ -1,0 +1,16 @@
+{block content}
+    <h1 n:block="title">Přihlášení</h1>
+
+    <p>Nyní je třeba se přihlásit. Bude to chvíli trvat, ale po to potřeba k potvrzení Vaší totožnosti.
+    Pokud jste zde poprvné a nemáte přidelené heslo, použijte prosím
+        <a n:href="Sign:register#registrace">registrační formulář</a>.</p>
+
+    {control signForm}
+
+    <p>Pokud jste úspěšně dokončili registraci, mělo by na Váš e-mail dorazit heslo, které můžete použít
+    do výše uvedeného formuláře pro přihlášení. </p>
+
+    <p>V případě, že jste heslo zapomněli, nebo jste o e-mail s přihlašovacími údajemi přišli, můžete
+        si heslo <a n:href="Sign:RecoverPassword">obnovit</a>.</p>
+
+{/block}

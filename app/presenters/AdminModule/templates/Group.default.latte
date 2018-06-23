@@ -1,0 +1,22 @@
+{block head}
+<style type="text/css" media="all">
+    #groupForm td { text-align: center; }
+</style>
+{/block}
+
+{block content}
+
+<h1 n:block="title">Skupiny</h1>
+
+    <table id="groupForm">
+        <tr><th>Název</th><th>Heslo</th><th>Aktivní</th><th></th></tr>
+        {foreach $groups as $group}
+            {control groupForm-$group->id}
+        {/foreach}
+    </table>
+
+<h2>Přidání skupiny</h2>
+
+    {control addGroupForm}
+
+{/block}

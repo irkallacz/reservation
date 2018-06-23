@@ -1,0 +1,94 @@
+{block head}
+	<style type="text/css" n:syntax="off">
+		.controls { display: flex; margin-bottom: 1em; }
+		.controls a { text-decoration: none; }
+		.control { flex-direction: column; flex: 1; }
+		.calendar { display: flex; }
+		.day { flex-direction: column; flex: 1; position: relative; }
+		.event { flex-direction: row; height: 3em; border: 1px solid gray; overflow: hidden;}
+		.hours { flex-direction: column; padding-top: calc(4em + 2px);}
+		header { text-align: center; margin-bottom: 1em;}
+		.day .event:nth-child(7), .hours .hour:nth-child(6)  { margin-top: 1em;}
+		.visit { height: 100%; background-color: lightgreen; padding: 0 0.5ex; {*position: relative;*}}
+		.visit.spiro { border-left: #006aeb 5px solid;}
+		.visit.old { background-color: greenyellow;}
+		.visit.closed { background-color: lightcoral;}
+		.visit.full { background-color: orangered;}
+		.visit a.edit { float: right; text-decoration: none; }
+
+		.now { background-color: red; position: absolute; width: 100%; height: 2px;}
+	</style>
+{/block}
+
+{block content}
+
+<h1 n:block="title">Administrace</h1>
+
+<div class="controls">
+	<div class="control text-left">
+		<a n:href="this year => date('Y'), week => date('W')">Dnes</a>
+	</div>
+	<div class="control text-center">
+		<a n:href="this year => $prev->format('Y'), week => $prev->format('W')">◀</a>
+		<a n:href="this">Týden {$dateStart|date:'W'}</a>
+		<a n:href="this year => $next->format('Y'), week => $next->format('W')">▶</a>
+	</div>
+	<div class="control text-right">
+		{control calendarForm}
+	</div>
+</div>
+
+{form reservationForm}
+
+<p>{input delete} {input add} {input change} {label group /} {input group} {label dateLimit /} {input dateLimit} {label open /} {input open} </p>
+
+<div class="calendar">
+	<div class="hours">
+		{foreach $hours as $hour}
+			<div class="hour event">{$hour|date:'H:i'}</div>
+		{/foreach}
+	</div>
+	{foreach $calendar as $day => $events}
+		<article class="day">
+			<header class="event">
+				<input type="checkbox" class="day-checkbox" id="day-{$day|date:'D'}" value="{$day|date:'D'}">
+				<label for="day-{$day|date:'D'}">
+				{$day|date:'%d-%b-%y'}<br>
+				{$day|date:'%a'}
+				</label>
+			</header>
+			{foreach $events as $id => $visit}
+				<div n:class="event">
+					{if $visit}
+					<div n:if="$visit" n:class="visit, $visit->person ? 'full' : NULL, $visit->canLogIn ? NULL : 'old', $visit->open ? 'open' : 'closed', ($visit->type == 2) ? 'spiro'">
+						<a class="edit" n:href="view $visit->id">🖉</a>
+						<input n:name="visit:$visit->id" class="{$day|date:'D'}">
+						<label n:name="visit:$visit->id">
+							<span n:if="$visit->person">{$visit->person->surname} {$visit->person->name}<br></span>
+							<small n:if="$visit->group">{$visit->group->title}</small>
+							<small><i>({$visit->dateLimit|date:'d.m.y'})</i></small>
+						</label>
+					</div>
+					{else}
+						<input n:name="event:$id" class="{$day|date:'D'}">
+					{/if}
+				</div>
+			{/foreach}
+
+			<hr n:if="($day == date('d.m.Y'))and($top)" class="now" style="top: {$top|noescape}em">
+		</article>
+	{/foreach}
+</div>
+{/form}
+
+<script type="application/javascript">
+	document.querySelectorAll('input.day-checkbox').forEach(function (value) {
+		value.addEventListener('click', function (event) {
+			document.querySelectorAll('input.'+value.value).forEach(function (checkbox) {
+				checkbox.checked = value.checked;
+			});
+		});
+	})
+</script>
+
+{/block}
