@@ -24,7 +24,8 @@ class VisitFormFactory
 	 * GroupLogInFormFactory constructor.
 	 * @param ICollection $groups
 	 */
-	public function __construct($groups) {
+	public function __construct(ICollection $groups)
+	{
 		$this->groups = $groups;
 	}
 
