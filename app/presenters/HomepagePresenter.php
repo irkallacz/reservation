@@ -10,8 +10,6 @@ final class HomepagePresenter extends BasePresenter
 {
 	public function renderDefault()
 	{
-		Debugger::barDump(Passwords::hash('Active12'));
-
 		$groups = $this->orm->groups
 			->findBy(['active' => TRUE])
 			->orderBy('title');
