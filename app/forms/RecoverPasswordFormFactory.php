@@ -15,7 +15,7 @@ use Nette\Forms\Container;
 use Tracy\Debugger;
 
 
-class RecoverPasswordFormFactory
+final class RecoverPasswordFormFactory
 {
 	use Nette\SmartObject;
 

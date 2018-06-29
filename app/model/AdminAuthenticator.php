@@ -17,7 +17,7 @@ use Nette\Security\Passwords;
 use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
-class AdminAuthenticator implements IAuthenticator {
+final class AdminAuthenticator implements IAuthenticator {
 
 	/**
 	 * @var Orm

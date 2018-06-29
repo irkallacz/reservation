@@ -13,7 +13,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nextras\Orm\Collection\ICollection;
 
-class VisitFormFactory
+final class VisitFormFactory
 {
 	use Nette\SmartObject;
 

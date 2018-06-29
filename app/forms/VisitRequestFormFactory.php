@@ -13,7 +13,8 @@ use Nette\Application\UI\Form;
 use Nette\SmartObject;
 use Nette\Utils\DateTime;
 
-class VisitRequestFormFactory {
+final class VisitRequestFormFactory
+{
 	use SmartObject;
 
 	/**

@@ -15,7 +15,7 @@ use Nette\Security\Identity;
 use Nette\Security\Passwords;
 use Tracy\Debugger;
 
-class UserAuthenticator implements IAuthenticator {
+final class UserAuthenticator implements IAuthenticator {
 
 	/**
 	 * @var Orm

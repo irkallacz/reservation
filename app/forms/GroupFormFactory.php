@@ -13,7 +13,7 @@ use Nette\Application\UI\Form;
 use Tracy\Debugger;
 
 
-class GroupFormFactory {
+final class GroupFormFactory {
 
 	/**
 	 * @return Form

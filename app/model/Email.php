@@ -10,9 +10,11 @@ namespace App\Model;
 
 
 use Nette\Mail\Message;
+use Nette\StaticClass;
 
-class Email
+final class Email
 {
+	use StaticClass;
 	/**
 	 * @return Message
 	 */

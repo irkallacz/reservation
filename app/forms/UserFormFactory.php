@@ -14,7 +14,7 @@ use Nette\Application\UI\Form;
 use Tracy\Debugger;
 
 
-class UserFormFactory
+final class UserFormFactory
 {
 	use Nette\SmartObject;
 

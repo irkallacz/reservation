@@ -14,7 +14,7 @@ use Nette\Application\UI\Form;
 use Tracy\Debugger;
 use Nextras\Orm\Collection\ICollection;
 
-class GroupLogInFormFactory
+final class GroupLogInFormFactory
 {
 	use Nette\SmartObject;
 
