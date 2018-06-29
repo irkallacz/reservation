@@ -19,13 +19,19 @@ use Tracy\Debugger;
 final class ProfilePresenter extends UserPresenter
 {
 
+	/**
+	 *
+	 */
 	public function renderDefault()
 	{
 		$this->template->person = $this->person;
 		$this->template->request = $this->person->visitRequest;
 	}
 
-	protected function createComponentUserForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentUserForm(): Form
 	{
 		$form = UserFormFactory::create();
 
@@ -61,13 +67,19 @@ final class ProfilePresenter extends UserPresenter
 		return $form;
 	}
 
+	/**
+	 *
+	 */
 	public function actionEdit()
 	{
 		$this['userForm']->setDefaults($this->person->toArray());
 	}
 
 
-	protected function createComponentGroupForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentGroupForm(): Form
 	{
 		$groups = $this->orm->groups->findBy([
 			'active' => TRUE,
@@ -100,7 +112,11 @@ final class ProfilePresenter extends UserPresenter
 		return $form;
 	}
 
-	public function actionGroupLogOut($id)
+	/**
+	 * @param int $id
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionGroupLogOut(int $id)
 	{
 		$group = $this->orm->groups->getById($id);
 		$group->persons->remove($this->person);
@@ -111,7 +127,10 @@ final class ProfilePresenter extends UserPresenter
 	}
 
 
-	protected function createComponentVisitRequestForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentVisitRequestForm(): Form
 	{
 		$form = VisitRequestFormFactory::create();
 
@@ -142,6 +161,9 @@ final class ProfilePresenter extends UserPresenter
 		return $form;
 	}
 
+	/**
+	 *
+	 */
 	public function actionVisitRequest()
 	{
 		if  ($this->person->visitRequest)

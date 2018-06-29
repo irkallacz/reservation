@@ -18,7 +18,10 @@ use Tracy\Debugger;
  */
 final class AdminsRepository extends Repository
 {
-	static function getEntityClassNames()
+	/**
+	 * @return array
+	 */
+	static function getEntityClassNames(): array
 	{
 		return [Admin::class];
 	}

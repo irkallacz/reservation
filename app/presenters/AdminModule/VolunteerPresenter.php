@@ -9,13 +9,14 @@
 namespace App\AdminModule\Presenters;
 
 use Nette\Forms\Container;
+use Nette\Forms\Form;
 use Nextras\Datagrid\Datagrid;
 use Nextras\Orm\Collection\ICollection;
 
 final class VolunteerPresenter extends AdminPresenter
 {
 
-	protected function createComponentVolunteerGrid()
+	protected function createComponentVolunteerGrid(): Datagrid
 	{
 		$grid = new Datagrid();
 		$grid->addColumn('id', '');
@@ -50,7 +51,7 @@ final class VolunteerPresenter extends AdminPresenter
 	 * @param array $order
 	 * @return ICollection
 	 */
-	public function getRequestCollection($filter, $order)
+	public function getRequestCollection(array $filter, array $order): ICollection
 	{
 		if ($order) {
 			$sort = $order[0];
@@ -64,6 +65,5 @@ final class VolunteerPresenter extends AdminPresenter
 
 		return $requests;
 	}
-
 
 }

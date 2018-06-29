@@ -43,7 +43,7 @@ final class Person extends Entity
 	/**
 	 * @return string
 	 */
-	protected function getterFullName()
+	protected function getterFullName(): string
 	{
 		return $this->surname . ' ' . $this->name;
 	}

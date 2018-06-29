@@ -46,7 +46,7 @@ final class Visit extends Entity
 	/**
 	 * @return float
 	 */
-	protected function getterLength()
+	protected function getterLength(): float
 	{
 		$interval = $this->dateEnd->diff($this->dateStart);
 		return  self::getMinutes($interval) / 6;
@@ -55,7 +55,7 @@ final class Visit extends Entity
 	/**
 	 * @return float
 	 */
-	protected function getterPosition()
+	protected function getterPosition(): float
 	{
 		$dayStart = $this->dateStart->setTime(6, 0);
 		$interval = $this->dateStart->diff($dayStart);
@@ -66,7 +66,7 @@ final class Visit extends Entity
 	 * @param \DateInterval $interval
 	 * @return int
 	 */
-	private static function getMinutes(\DateInterval $interval)
+	private static function getMinutes(\DateInterval $interval): int
 	{
 		return $interval->h * 60 + $interval->i;
 	}
@@ -74,7 +74,7 @@ final class Visit extends Entity
 	/**
 	 * @return bool
 	 */
-	protected function getterIsOver()
+	protected function getterIsOver(): bool
 	{
 		return $this->dateStart < new DateTimeImmutable();
 	}
@@ -82,7 +82,7 @@ final class Visit extends Entity
 	/**
 	 * @return bool
 	 */
-	protected function getterCanLogIn()
+	protected function getterCanLogIn(): bool
 	{
 		return ($this->open) and ($this->dateLimit > new DateTimeImmutable());
 	}
@@ -90,7 +90,7 @@ final class Visit extends Entity
 	/**
 	 * @return bool
 	 */
-	protected function getterCanLogOut()
+	protected function getterCanLogOut(): bool
 	{
 		return $this->dateLimit > new DateTimeImmutable();
 	}
@@ -98,7 +98,7 @@ final class Visit extends Entity
 	/**
 	 * @return bool
 	 */
-	protected function getterIsInProgress()
+	protected function getterIsInProgress(): bool
 	{
 		$now = new DateTimeImmutable();
 		return ($this->dateStart > $now) and ($this->dateEnd < $now);
@@ -112,7 +112,11 @@ final class Visit extends Entity
 		$this->type = self::TYPE_ECG;
 	}
 
-	public function canSatisfyRequest(VisitRequest $request)
+	/**
+	 * @param VisitRequest $request
+	 * @return bool
+	 */
+	public function canSatisfyRequest(VisitRequest $request): bool
 	{
 		if (($request->dateStart > $this->dateStart)or($request->dateEnd < $this->dateEnd)) return FALSE;
 		if (!in_array(($this->dateStart->format('N')-1), $request->daysArray)) return FALSE;

@@ -18,8 +18,10 @@ class UserFormFactory
 {
 	use Nette\SmartObject;
 
-	/** @return Form */
-	public static function create()
+	/**
+	 * @return Form
+	 */
+	public static function create(): Form
 	{
 
 		$form = new Form;

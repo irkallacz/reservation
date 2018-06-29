@@ -37,7 +37,8 @@ final class Group extends Entity
 	/**
 	 * @return int
 	 */
-	protected function getterActiveVisitsCount(){
+	protected function getterActiveVisitsCount(): int
+	{
 		return $this->visits->get()->findBy([
 			'open' => TRUE,
 			'dateStart>' => new \DateTime()
@@ -47,7 +48,8 @@ final class Group extends Entity
 	/**
 	 * @return DateTimeImmutable|NULL
 	 */
-	protected function getterVisitsLimit(){
+	protected function getterVisitsLimit()
+	{
 		/** @var Visit $lastVisit*/
 		$lastVisit = $this->visits->get()
 			->findBy(['dateStart>' => new \DateTime])

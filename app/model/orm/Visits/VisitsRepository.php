@@ -21,7 +21,7 @@ final class VisitsRepository extends Repository
 	/**
 	 * @return array
 	 */
-	static function getEntityClassNames()
+	static function getEntityClassNames(): array
 	{
 		return [Visit::class];
 	}
@@ -30,7 +30,7 @@ final class VisitsRepository extends Repository
 	 * @param mixed $group
 	 * @return ICollection
 	 */
-	public function findFutureByGroup($group)
+	public function findFutureByGroup($group): ICollection
 	{
 		return $this->findBy([
 			'group' => $group,

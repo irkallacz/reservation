@@ -65,7 +65,7 @@ class AdminAuthenticator implements IAuthenticator {
 	 * @throws ApplicationException
 	 * @throws AuthenticationException
 	 */
-	private function ldap($login, $password)
+	private function ldap($login, $password): ArrayHash
 	{
 		$ds = ldap_connect('ldaps://ldap.tul.cz/', 636);
 

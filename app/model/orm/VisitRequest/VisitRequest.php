@@ -30,12 +30,15 @@ use Tracy\Debugger;
  */
 final class VisitRequest extends Entity
 {
+	/**
+	 * Names of day in week
+	 */
 	const DAY_NAMES = ['pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek'];
 
 	/**
 	 * @return array
 	 */
-	protected function getterDaysArray()
+	protected function getterDaysArray(): array
 	{
 		return array_keys(array_filter(str_split(decbin($this->days))));
 	}
@@ -52,7 +55,11 @@ final class VisitRequest extends Entity
 		return $array;
 	}
 
-	public function getDaysInString(){
+	/**
+	 * @return string
+	 */
+	public function getDaysInString(): string
+	{
 		return implode(', ', array_intersect_key(self::DAY_NAMES, array_flip($this->daysArray)));
 	}
 

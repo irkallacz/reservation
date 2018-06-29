@@ -17,7 +17,10 @@ use Nextras\Orm\Repository\Repository;
  */
 final class VisitRequestsRepository extends Repository
 {
-	static function getEntityClassNames()
+	/**
+	 * @return array
+	 */
+	static function getEntityClassNames(): array
 	{
 		return [VisitRequest::class];
 	}

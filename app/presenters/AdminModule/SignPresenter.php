@@ -24,6 +24,9 @@ final class SignPresenter extends BasePresenter
 	/** @var $backlink */
 	public $backlink = '';
 
+	/**
+	 * @throws \Nette\Application\AbortException
+	 */
 	public function actionOut()
 	{
 		$this->getUser()->logout();
@@ -32,6 +35,9 @@ final class SignPresenter extends BasePresenter
 		$this->redirect('Reservation:default');
 	}
 
+	/**
+	 * @throws \Nette\Application\AbortException
+	 */
 	public function actionDefault()
 	{
 		$this->user->getStorage()->setNamespace('admin');
@@ -42,7 +48,10 @@ final class SignPresenter extends BasePresenter
 		}
 	}
 
-	protected function createComponentSignForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentSignForm(): Form
 	{
 		$form = SignFormFactory::create();
 

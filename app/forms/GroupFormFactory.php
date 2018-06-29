@@ -18,8 +18,8 @@ class GroupFormFactory {
 	/**
 	 * @return Form
 	 */
-
-	public static function create(){
+	public static function create(): Form
+	{
 
 		$form = new Form;
 		$form->addText('title','Název');

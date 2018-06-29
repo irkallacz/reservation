@@ -17,7 +17,10 @@ use Tracy\Debugger;
 final class PatientPresenter extends AdminPresenter
 {
 
-	protected function createComponentPatientGrid()
+	/**
+	 * @return Datagrid
+	 */
+	protected function createComponentPatientGrid(): Datagrid
 	{
 		$grid = new Datagrid();
 		$grid->addColumn('id', '');
@@ -54,7 +57,7 @@ final class PatientPresenter extends AdminPresenter
 	 * @param array $order
 	 * @return ICollection
 	 */
-	public function getPatientsCollection($filter, $order)
+	public function getPatientsCollection(array $filter, array $order): ICollection
 	{
 		if ($order) {
 			$sort = $order[0];

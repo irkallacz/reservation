@@ -26,6 +26,9 @@ final class ReservationPresenter extends UserPresenter
 	/** @var IMailer $mailer @inject */
 	public $mailer;
 
+	/**
+	 *
+	 */
 	public function actionDefault()
 	{
 		$visit = $this->person->getNextVisit();
@@ -69,12 +72,12 @@ final class ReservationPresenter extends UserPresenter
 	}
 
 	/**
-	 * @param $id
+	 * @param int $id
 	 * @throws BadRequestException
 	 * @throws ForbiddenRequestException
 	 * @throws \Nette\Application\AbortException
 	 */
-	public function actionLogIn($id) {
+	public function actionLogIn(int $id) {
 		$visit = $this->orm->visits->getById($id);
 
 		if (!$visit) throw new BadRequestException('Termín nenalezen');
@@ -126,11 +129,18 @@ final class ReservationPresenter extends UserPresenter
 		$this->redirect('default');
 	}
 
+	/**
+	 *
+	 */
 	public function renderPersons() {
 		$this->template->groups = $this->person->groups;
 	}
 
-	protected function createComponentVisitForm() {
+	/**
+	 * @return Form
+	 */
+	protected function createComponentVisitForm(): Form
+	{
 		$form = new Form;
 
 		$form->addRadioList('type', 'Typ vyšetření', [Visit::TYPE_ECG => 'Sportovní prohlídka', Visit::TYPE_SPIRO => 'Funkční vyšetření'])

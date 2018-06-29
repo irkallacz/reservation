@@ -15,7 +15,10 @@ use Nextras\Orm\Repository\Repository;
  */
 final class GroupsRepository extends Repository
 {
-	static function getEntityClassNames()
+	/**
+	 * @return array
+	 */
+	static function getEntityClassNames(): array
 	{
 		return [Group::class];
 	}

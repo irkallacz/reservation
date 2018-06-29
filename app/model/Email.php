@@ -16,7 +16,7 @@ class Email
 	/**
 	 * @return Message
 	 */
-	public static function newMessage()
+	public static function newMessage(): Message
 	{
 		$message = new Message();
 		$message->setFrom('Centrum sportovní medicíny <sportovnimedicina@tul.cz>');

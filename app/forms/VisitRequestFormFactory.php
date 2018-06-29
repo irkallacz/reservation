@@ -16,8 +16,10 @@ use Nette\Utils\DateTime;
 class VisitRequestFormFactory {
 	use SmartObject;
 
-	/** @return Form */
-	public static function create()
+	/**
+	 * @return Form
+	 */
+	public static function create(): Form
 	{
 		$form = new Form();
 

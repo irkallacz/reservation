@@ -22,7 +22,7 @@ class RecoverPasswordFormFactory
 	/**
 	 * @return Form
 	 */
-	public static function create()
+	public static function create(): Form
 	{
 
 		$form = new Form;

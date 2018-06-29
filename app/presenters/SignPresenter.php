@@ -37,6 +37,9 @@ final class SignPresenter extends BasePresenter
 	/** @var IMailer @inject*/
 	public $mailer;
 
+	/**
+	 * @throws \Nette\Application\AbortException
+	 */
 	public function actionLogout()
 	{
 		$this->getUser()->logout();
@@ -45,6 +48,9 @@ final class SignPresenter extends BasePresenter
 		$this->redirect('Homepage:default');
 	}
 
+	/**
+	 * @return Form
+	 */
 	protected function createComponentSignForm()
 	{
 		$form = SignFormFactory::create();
@@ -70,7 +76,10 @@ final class SignPresenter extends BasePresenter
 		return $form;
 	}
 
-	protected function createComponentRegistrationForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentRegistrationForm(): Form
 	{
 		$form = UserFormFactory::create();
 
@@ -132,7 +141,10 @@ final class SignPresenter extends BasePresenter
 		return $form;
 	}
 
-	protected function createComponentRecoverPasswordForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentRecoverPasswordForm(): Form
 	{
 		$form = RecoverPasswordFormFactory::create();
 

@@ -21,7 +21,7 @@ final class ReservationPresenter extends AdminPresenter {
 	 * @param int $year
 	 * @param int $week
 	 */
-	public function renderDefault($year = NULL, $week = NULL) {
+	public function renderDefault(int $year = NULL, int $week = NULL) {
 		if (is_null($year)) $year = intval(date('Y'));
 		if (is_null($week)) $week = intval(date('W'));
 
@@ -79,7 +79,10 @@ final class ReservationPresenter extends AdminPresenter {
 		$this->template->top = $top;
 	}
 
-	protected function createComponentReservationForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentReservationForm():Form
 	{
 		$visitFormFactory = new VisitFormFactory(
 		 	$this->orm->groups->findAll()->orderBy('title')
@@ -151,7 +154,10 @@ final class ReservationPresenter extends AdminPresenter {
 		return $form;
 	}
 
-	public function renderView($id)
+	/**
+	 * @param int $id
+	 */
+	public function renderView(int $id)
 	{
 		$visit = $this->orm->visits->getById($id);
 		$this->template->visit = $visit;
@@ -160,7 +166,11 @@ final class ReservationPresenter extends AdminPresenter {
 		$this['visitForm']['dateLimit']->setDefaultValue($visit->dateLimit);
 	}
 
-	public function actionDelete($id)
+	/**
+	 * @param int $id
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionDelete(int $id)
 	{
 		$visit = $this->orm->visits->getById($id);
 
@@ -171,7 +181,12 @@ final class ReservationPresenter extends AdminPresenter {
 		$this->redirect('default');
 	}
 
-	public function actionSetOpen($id, $open)
+	/**
+	 * @param int $id
+	 * @param bool $open
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionSetOpen(int $id, bool $open)
 	{
 		$visit = $this->orm->visits->getById($id);
 		$visit->open = $open;
@@ -181,7 +196,11 @@ final class ReservationPresenter extends AdminPresenter {
 		$this->redirect('view', $visit->id);
 	}
 
-	public function actionLogout($id)
+	/**
+	 * @param int $id
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionLogout(int $id)
 	{
 		$visit = $this->orm->visits->getById($id);
 		$visit->logOut();
@@ -191,7 +210,10 @@ final class ReservationPresenter extends AdminPresenter {
 		$this->redirect('view', $visit->id);
 	}
 
-	protected function createComponentVisitForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentVisitForm(): Form
 	{
 		$visitFormFactory = new VisitFormFactory(
 			$this->orm->groups->findAll()->orderBy('title')
@@ -219,7 +241,10 @@ final class ReservationPresenter extends AdminPresenter {
 		return $form;
 	}
 
-	protected function createComponentCalendarForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentCalendarForm(): Form
 	{
 		$year = $this->getParameter('year');
 		$year = $year ? $year : date('Y');

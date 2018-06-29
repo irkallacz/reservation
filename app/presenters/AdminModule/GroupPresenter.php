@@ -20,6 +20,9 @@ use Tracy\Debugger;
 
 final class GroupPresenter extends AdminPresenter {
 
+	/**
+	 *
+	 */
 	public function renderDefault()
 	{
 		$this->template->groups = $this->orm->groups
@@ -28,7 +31,10 @@ final class GroupPresenter extends AdminPresenter {
 			->orderBy('title');
 	}
 
-	protected function createComponentGroupForm()
+	/**
+	 * @return Multiplier
+	 */
+	protected function createComponentGroupForm(): Multiplier
 	{
 		return new Multiplier(function ($id)
 		{
@@ -52,13 +58,20 @@ final class GroupPresenter extends AdminPresenter {
 		});
 	}
 
-	protected function createComponentAddGroupForm()
+	/**
+	 * @return Form
+	 */
+	protected function createComponentAddGroupForm(): Form
 	{
 		$form = GroupFormFactory::create();
 		$form->onSuccess[] = [$this, 'successGroupForm'];
 		return $form;
 	}
 
+	/**
+	 * @param Form $form
+	 * @throws \Nette\Application\AbortException
+	 */
 	public function successGroupForm(Form $form)
 	{
 		$values = $form->getValues();
