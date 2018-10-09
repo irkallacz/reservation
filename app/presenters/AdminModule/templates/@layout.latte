@@ -17,7 +17,9 @@
 	<span n:class="$value ? green : red">{$value ? '✔' : '✖'}{ifset $title} {$value ? $title[1] : $title[0]}{/ifset}</span>
 {/define}
 
-{define svg}<img src="{$basePath}/image/svg/{$name}.svg" alt="{isset($alt) ? $alt : $name}" n:class="svg, isset($class) ? $class">{/define}
+{define svg $name, $class, $alt}
+    <img src="{$basePath}/image/svg/{$name}.svg" alt="{isset($alt) ? $alt : $name}" n:class="svg, isset($class) ? $class">
+{/define}
 
 <body>
 
@@ -26,16 +28,16 @@
             <a class="title" id="csm" href="http://rezervace.sportovnimedicina.tul.cz" title="Centrum sportovní medicíny">
                 Centrum sportovní medicíny
             </a>
-			<a class="title" id="name" n:href="Reservation:" title="Sportovní anamnézy">
-				{include svg name => helmet}Rezervace
+			<a class="title" id="name" n:href="Reservation:" title="Rezervace">
+				{include svg icon} Rezervace
 			</a>
 
 			<nav class="top-menu" n:if="$user->isLoggedIn()">
                 <ul>
-                    <li><a {ifCurrent Reservation:*}class="current"{/ifCurrent} n:href="Reservation:">{include svg name => home, class => circle} úvod</a></li>
-                    <li><a {ifCurrent Patient:*}class="current"{/ifCurrent} n:href="Patient:">{include svg name => user, class => circle} pacienti</a></li>
-                    <li><a {ifCurrent Group:*}class="current"{/ifCurrent} n:href="Group:">{include svg name => team, class => circle} skupiny</a></li>
-                    <li><a {ifCurrent Volunteer:*}class="current"{/ifCurrent} n:href="Volunteer:">{include svg name => glass, class => circle} žádosti</a></li>
+                    <li><a {ifCurrent Reservation:*}class="current"{/ifCurrent} n:href="Reservation:">{include svg home, circle} rezervace</a></li>
+                    <li><a {ifCurrent Patient:*}class="current"{/ifCurrent} n:href="Patient:">{include svg user, circle} pacienti</a></li>
+                    <li><a {ifCurrent Group:*}class="current"{/ifCurrent} n:href="Group:">{include svg team, circle} skupiny</a></li>
+                    <li><a {ifCurrent Volunteer:*}class="current"{/ifCurrent} n:href="Volunteer:">{include svg clock, circle} žádosti</a></li>
                 </ul>
             </nav>
 
