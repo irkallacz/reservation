@@ -59,9 +59,8 @@ final class ReservationPresenter extends AdminPresenter {
 		])->orderBy('dateStart')
 			->fetchPairs('id');
 
-		foreach ($visits as $visit){
-			if (array_key_exists($visit->dateStart->format($formatHour), $calendar[$visit->dateStart->format($formatDay)]))
-			{
+		foreach ($visits as $visit) {
+			if (array_key_exists($visit->dateStart->format($formatHour), $calendar[$visit->dateStart->format($formatDay)])) {
 				$calendar[$visit->dateStart->format($formatDay)][$visit->dateStart->format($formatHour)] = $visit;
 			}
 		}
@@ -246,13 +245,13 @@ final class ReservationPresenter extends AdminPresenter {
 	 */
 	protected function createComponentCalendarForm(): Form
 	{
-		$year = $this->getParameter('year');
-		$year = $year ? $year : date('Y');
+		$year = (int) $this->getParameter('year');
+		$year = $year ? $year : intval(date('Y'));
 		$years = range(($year - 3), ($year + 3));
 		$years = array_combine($years, $years);
 
-		$week = $this->getParameter('week');
-		$week = $week ? $week : date('W');
+		$week = (int) $this->getParameter('week');
+		$week = $week ? $week : intval(date('W'));
 
 		$date = new DateTime();
 		$date->setISODate($year, $week);
@@ -274,7 +273,7 @@ final class ReservationPresenter extends AdminPresenter {
 
 		$form->addSelect('month')
 			->setItems($months)
-			->setDefaultValue($date->format('n'));
+			->setDefaultValue(intval($date->format('n')));
 
 		$form->addSelect('year')
 			->setItems($years)
@@ -287,9 +286,9 @@ final class ReservationPresenter extends AdminPresenter {
 
 			$date = new DateTime("1.$values->month.$values->year");
 			if ($date->format('N')>5) $date->modify('+ 2 day');
-			$week = $date->format('W');
+			$week = (int) $date->format('W');
 
-			$this->redirect('this', ['year' => $values->year, 'week' => $week]);
+			$this->redirect('this', ['year' => intval($values->year), 'week' => $week]);
 		};
 
 		return $form;
