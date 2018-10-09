@@ -20,13 +20,12 @@ a:hover, a:active, a:focus { background-color: #006aeb; text-decoration: none; c
 
 .footer, .logo {font-family: "Segoe UI","Open Sans","Trebuchet MS",Arial,Helvetica,"Helvetica Neue",sans-serif;
     color: #4086BE;}
-.footer a, .green {color: #BACE29;}
 
 .footer {padding: 0.5em 1em; text-transform: uppercase; font-weight: bold; text-align: center; font-size: 16px;}
 .footer a {text-decoration: none;}
 .footer p:first-child {margin: 0;}
 
-.greenframe {border: 1em solid #bace29; border-radius: 1em; background-color: white;}
+.frame {border: 1em solid #0063c4; border-radius: 1em; background-color: white;}
 
 .clearfix {clear: both}
 
