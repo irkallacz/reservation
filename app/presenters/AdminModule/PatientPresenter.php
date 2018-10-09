@@ -10,6 +10,7 @@ namespace App\AdminModule\Presenters;
 
 
 use Nette\Forms\Container;
+use Nette\Utils\Paginator;
 use Nextras\Datagrid\Datagrid;
 use Nextras\Orm\Collection\ICollection;
 use Tracy\Debugger;
@@ -24,7 +25,7 @@ final class PatientPresenter extends AdminPresenter
 	{
 		$grid = new Datagrid();
 		$grid->addColumn('id', '');
-		$grid->addColumn('surname', 'Příjmení')->enableSort();
+		$grid->addColumn('surname', 'Příjmení')->enableSort(Datagrid::ORDER_ASC);
 		$grid->addColumn('name', 'Jméno')->enableSort();
 		$grid->addColumn('rc', 'Rodné číslo')->enableSort();
 		$grid->addColumn('mail', 'E-mail')->enableSort();
@@ -32,8 +33,8 @@ final class PatientPresenter extends AdminPresenter
 
 		$grid->setDataSourceCallback([$this, 'getPatientsCollection']);
 
-		$grid->setPagination(50, function($filter, $order){
-			return $this->getPatientsCollection($filter, NULL)->count();
+		$grid->setPagination(50, function($filter){
+			return $this->getPatientsCollection($filter)->count();
 		});
 
 		$grid->setFilterFormFactory(function() {
@@ -54,20 +55,23 @@ final class PatientPresenter extends AdminPresenter
 
 	/**
 	 * @param array $filter
-	 * @param array $order
+	 * @param array|null $order
+	 * @param Paginator|null $paginator
 	 * @return ICollection
 	 */
-	public function getPatientsCollection(array $filter, array $order): ICollection
+	public function getPatientsCollection(array $filter, array $order = null, Paginator $paginator = null): ICollection
 	{
+		$patients = ($filter) ? $this->orm->persons->findByFilter($filter) : $this->orm->persons->findAll();
+
 		if ($order) {
-			$sort = $order[0];
+			$column = $order[0];
 			$direction = ($order[1] == 'DESC') ? ICollection::DESC : ICollection::ASC;
-		}else {
-			 $sort = 'surname';
-			 $direction = ICollection::ASC;
+			$patients = $patients->orderBy($column, $direction);
 		}
 
-		$patients = ($filter) ? $this->orm->persons->findByFilter($filter)->orderBy($sort, $direction) : $this->orm->persons->findAll()->orderBy($sort, $direction);
+		if ($paginator) {
+			$patients = $patients->limitBy($paginator->getItemsPerPage(), $paginator->getOffset());
+		}
 
 		return $patients;
 	}

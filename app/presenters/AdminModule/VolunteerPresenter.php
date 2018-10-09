@@ -48,10 +48,10 @@ final class VolunteerPresenter extends AdminPresenter
 
 	/**
 	 * @param array $filter
-	 * @param array $order
+	 * @param array|null $order
 	 * @return ICollection
 	 */
-	public function getRequestCollection(array $filter, array $order): ICollection
+	public function getRequestCollection(array $filter, $order): ICollection
 	{
 		if ($order) {
 			$sort = $order[0];
