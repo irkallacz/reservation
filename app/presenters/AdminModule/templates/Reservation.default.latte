@@ -26,12 +26,12 @@
 
 <div class="controls">
 	<div class="control text-left">
-		<a n:href="this year => date('Y'), week => date('W')">Dnes</a>
+		<a n:href="this year => intval(date('Y')), week => intval(date('W'))">Dnes</a>
 	</div>
 	<div class="control text-center">
-		<a n:href="this year => $prev->format('Y'), week => $prev->format('W')">◀</a>
+		<a n:href="this year => $prev->format('Y'), week => intval($prev->format('W'))">◀</a>
 		<a n:href="this">Týden {$dateStart|date:'W'}</a>
-		<a n:href="this year => $next->format('Y'), week => $next->format('W')">▶</a>
+		<a n:href="this year => $next->format('Y'), week => intval($next->format('W'))">▶</a>
 	</div>
 	<div class="control text-right">
 		{control calendarForm}
@@ -53,7 +53,7 @@
 			<header class="event">
 				<input type="checkbox" class="day-checkbox" id="day-{$day|date:'D'}" value="{$day|date:'D'}">
 				<label for="day-{$day|date:'D'}">
-				{$day|date:'%d-%b-%y'}<br>
+				{$day|date:'%d-%b-%y'|upper}<br>
 				{$day|date:'%a'}
 				</label>
 			</header>
