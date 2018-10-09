@@ -42,6 +42,7 @@ final class SignPresenter extends BasePresenter
 	 */
 	public function actionLogout()
 	{
+		$this->getUser()->getStorage()->setNamespace('user');
 		$this->getUser()->logout();
 
 		$this->flashMessage('Byl jste odhlášen');
@@ -125,11 +126,9 @@ final class SignPresenter extends BasePresenter
 			$template->password = $password;
 			$mail->setBody($template);
 
-			try
-			{
+			try {
 				$this->mailer->send($mail);
-			}catch(SendException $e)
-			{
+			} catch(SendException $e) {
 				$this->flashMessage('Odeslání e-mailu se nepovedlo, zkuste to prosím znovu', 'error');
 				$this->redirect('Sign:register');
 			}

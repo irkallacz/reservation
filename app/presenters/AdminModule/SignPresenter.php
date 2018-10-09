@@ -29,10 +29,11 @@ final class SignPresenter extends BasePresenter
 	 */
 	public function actionOut()
 	{
+		$this->getUser()->getStorage()->setNamespace('admin');
 		$this->getUser()->logout();
 
 		$this->flashMessage('Byl jste odhlášen');
-		$this->redirect('Reservation:default');
+		$this->redirect(':Homepage:default');
 	}
 
 	/**
