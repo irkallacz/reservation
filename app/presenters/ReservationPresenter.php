@@ -98,15 +98,20 @@ final class ReservationPresenter extends UserPresenter
 
 		$mail = Email::newMessage();
 		$mail->addTo($this->person->mail, $this->person->fullName);
-		$mail->setSubject('Rezervace prohlídky');
+		$mail->setSubject('Rezervace prohlídky '.$visit->dateStart->format('d.m.Y \v H:i'));
 
 		$template = $this->createTemplate();
 		$template->setFile(__DIR__.'/templates/Email/reservation.latte');
 		$template->date = $visit->dateStart;
 		$mail->setBody($template);
 
-		$this->mailer->send($mail);
+		$template = $this->createTemplate();
+		$template->setFile(__DIR__.'/templates/Email/event.latte');
+		$template->visit = $visit;
+		$event = (string) $template;
+		$mail->addAttachment('event.ics', $event);
 
+		$this->mailer->send($mail);
 
 		$this->flashMessage('Rezervovali jste si termín na ' . $visit->dateStart->format('d.m.Y \v H:i'));
 		$this->redirect('default');
