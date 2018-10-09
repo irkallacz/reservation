@@ -9,7 +9,6 @@
 namespace App\Model\Orm;
 
 use DateTimeImmutable;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Tracy\Debugger;
 
@@ -27,6 +26,7 @@ use Tracy\Debugger;
  * @property string|null			$note
 
  * @property int 					$type			{enum self::TYPE_*} {default self::TYPE_ECG}
+ * @property string 				$typeTitle		{virtual}
  *
  * @property Person|null  			$person      	{m:1 Person::$visits}
  * @property Group|null  			$group      	{m:1 Group::$visits}
@@ -37,11 +37,17 @@ use Tracy\Debugger;
  * @property-read boolean      		$canLogIn 		{virtual}
  * @property-read boolean      		$canLogOut 		{virtual}
  * @property-read boolean      		$isInProgress 	{virtual}
+ * @property-read string 			$timestamp 		{virtual}
  */
 final class Visit extends Entity
 {
 	const TYPE_ECG  	= 1;
 	const TYPE_SPIRO  	= 2;
+
+	protected  function getterTypeTitle(): string
+	{
+		return ($this->type == self::TYPE_SPIRO) ? 'Spiroergometrie' : 'Sportovní prohlídka';
+	}
 
 	/**
 	 * @return float
@@ -124,5 +130,11 @@ final class Visit extends Entity
 		if ($this->open = FALSE) return FALSE;
 
 		return TRUE;
+	}
+
+	public function getterTimestamp(): string
+	{
+		$timestamp = clone $this->dateUpdate;
+		return $timestamp->setTimezone(new \DateTimeZone('UTC'))->format('Ymd\THis\Z');
 	}
 }
