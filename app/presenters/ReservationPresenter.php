@@ -94,7 +94,7 @@ final class ReservationPresenter extends UserPresenter
 
 		$visit->person = $this->person;
 		$visit->open = FALSE;
-		$this->orm->persistAndFlush($visit);
+		$this->orm->visits->persistAndFlush($visit);
 
 		$mail = Email::newMessage();
 		$mail->addTo($this->person->mail, $this->person->fullName);
@@ -109,9 +109,14 @@ final class ReservationPresenter extends UserPresenter
 		$template->setFile(__DIR__.'/templates/Email/event.latte');
 		$template->visit = $visit;
 		$event = (string) $template;
+		$event = str_replace("\n","\r\n", $event);
 		$mail->addAttachment('event.ics', $event);
 
 		$this->mailer->send($mail);
+
+		unset($event);
+		unset($template);
+		unset($mail);
 
 		$this->flashMessage('Rezervovali jste si termín na ' . $visit->dateStart->format('d.m.Y \v H:i'));
 		$this->redirect('default');

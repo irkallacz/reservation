@@ -1,7 +1,7 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//CSM FP TUL//rezervace 2.0//CZ
-METHOD:REQUEST
+METHOD:PUBLISH
 BEGIN:VTIMEZONE
 TZID:Europe/Prague
 TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Prague
@@ -26,11 +26,18 @@ DTSTAMP:{$visit->timestamp}
 DTSTART;TZID=Europe/Prague:{$visit->dateStart->format('Ymd\THis')}
 DTEND;TZID=Europe/Prague:{$visit->dateEnd->format('Ymd\THis')}
 CREATED:{$visit->timestamp}
-ATTENDEE;CN={$visit->person->fullName}:mailto:{$visit->person->mail}
-SUMMARY:{if $visit->type == 2}Funkční vyšetření{else}Sporotvní prohlídka{/if}
+ATTENDEE;CN={$visit->person->fullName}:MAILTO:{$visit->person->mail}
+ORGANIZER;CN=Centrum sportovní medicíny:MAILTO:sportovnimedicina@tul.cz
+SUMMARY:{$visit->typeTitle}
 DESCRIPTION: Vyšetření v Centru sportovní medicíny v Liberci
-LOCATION:50.7700997\, 15.0912997
+LOCATION:Dubový vrch 714, Liberec
 UID:-{$visit->id}@rezervace.sportovnimedicina.tul.cz
+STATUS:CONFIRMED
 SEQUENCE:1
+BEGIN:VALARM
+TRIGGER:-PT1440M
+ACTION:DISPLAY
+DESCRIPTION:Připomínka vyšetření
+END:VALARM
 END:VEVENT
 END:VCALENDAR
