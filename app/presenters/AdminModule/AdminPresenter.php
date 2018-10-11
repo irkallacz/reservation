@@ -31,18 +31,4 @@ abstract class AdminPresenter extends BasePresenter
 		parent::checkRequirements($element);
 	}
 
-
-	public function beforeRender()
-	{
-		parent::beforeRender();
-
-		$menu = [
-			['title' => 'Administrace', 'link' => 'Homepage:',	'current' => 'Homepage:*',	'role'=> 'admin', 	'icon' => 'home'    ],
-			['title' => 'Pacienti', 	'link' => 'Patient:',	'current' => 'Patient:*', 	'role'=> 'admin',	'icon' => 'person'	],
-			['title' => 'Skupiny', 		'link' => 'Group:',		'current' => 'Group:*', 	'role'=> 'admin',	'icon' => 'group'	],
-			['title' => 'Žádosti', 		'link' => 'Volunteer:',	'current' => 'Volunteer:*', 'role'=> 'admin',	'icon' => 'request'	],
-		];
-
-		$this->template->menu = ArrayHash::from($menu);
-	}
 }
