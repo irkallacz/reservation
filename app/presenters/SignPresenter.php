@@ -150,8 +150,7 @@ final class SignPresenter extends BasePresenter
 			$values = $form->getValues();
 			$person = $this->orm->persons->getByMail($values->mail);
 
-			if (!$person)
-			{
+			if (!$person) {
 				$form->addError('V databázi se nenachází osoba s Vaším emailem!');
 			}
 		};
@@ -160,10 +159,10 @@ final class SignPresenter extends BasePresenter
 		{
 			$values = $form->getValues();
 			$password = Random::generate(8);
-			$hash = Passwords::hash($password);
 
 			$person = $this->orm->persons->getByMail($values->mail);
-			$person->mail = $values->mail;
+			$person->password = Passwords::hash($password);
+			$this->orm->persons->persistAndFlush($person);
 
 			$mail = new Message();
 			$mail->addTo($person->mail, $person->fullName);
