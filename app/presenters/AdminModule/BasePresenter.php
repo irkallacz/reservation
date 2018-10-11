@@ -6,7 +6,7 @@
  * Time: 10:20
  */
 
-namespace App\Presenters;
+namespace App\AdminModule\Presenters;
 
 use App\Model\Orm;
 use Nette\Application\UI\Presenter;
@@ -22,7 +22,7 @@ abstract class BasePresenter extends Presenter
 	public function checkRequirements($element)
 	{
 		parent::checkRequirements($element);
-		$this->getUser()->getStorage()->setNamespace('user');
+		$this->getUser()->getStorage()->setNamespace('admin');
 	}
 
 }

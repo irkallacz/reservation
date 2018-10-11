@@ -8,7 +8,6 @@
 
 namespace App\AdminModule\Presenters;
 
-use App\Presenters\BasePresenter;
 use Nette\Http\UserStorage;
 use Nette\Utils\ArrayHash;
 
@@ -20,8 +19,7 @@ abstract class AdminPresenter extends BasePresenter
 
 	public function checkRequirements($element)
 	{
-		$this->user->getStorage()->setNamespace('admin');
-
+		parent::checkRequirements($element);
 		if (!$this->user->isLoggedIn()) {
 			if ($this->user->logoutReason === UserStorage::INACTIVITY) {
 				$this->flashMessage('Byl jste odhlášen z důvodu dlouhé neaktivity', 'error');

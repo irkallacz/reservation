@@ -8,10 +8,8 @@
 
 namespace App\AdminModule\Presenters;
 
-
 use App\Forms\SignFormFactory;
 use App\Model\AdminAuthenticator;
-use App\Presenters\BasePresenter;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;
 
@@ -29,7 +27,6 @@ final class SignPresenter extends BasePresenter
 	 */
 	public function actionOut()
 	{
-		$this->getUser()->getStorage()->setNamespace('admin');
 		$this->getUser()->logout();
 
 		$this->flashMessage('Byl jste odhlášen');
@@ -41,8 +38,6 @@ final class SignPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		$this->user->getStorage()->setNamespace('admin');
-
 		if ($this->user->isLoggedIn())
 		{
 			$this->redirect('Reservation:default');
@@ -61,7 +56,6 @@ final class SignPresenter extends BasePresenter
 			$values = $form->getValues();
 
 			try {
-				$this->user->getStorage()->setNamespace('admin');
 				$this->user->setAuthenticator($this->authenticator);
 				$this->user->login($values->mail, $values->password);
 				$this->user->setExpiration(0, TRUE);

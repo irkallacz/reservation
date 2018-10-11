@@ -25,7 +25,7 @@ abstract class UserPresenter extends BasePresenter
 
 	public function checkRequirements($element)
 	{
-		$this->user->getStorage()->setNamespace('user');
+		parent::checkRequirements($element);
 
 		if (!$this->user->isLoggedIn()) {
 			if ($this->user->logoutReason === UserStorage::INACTIVITY) {

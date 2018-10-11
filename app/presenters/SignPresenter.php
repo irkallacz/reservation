@@ -42,8 +42,7 @@ final class SignPresenter extends BasePresenter
 	 */
 	public function actionLogout()
 	{
-		$this->getUser()->getStorage()->setNamespace('user');
-		$this->getUser()->logout();
+		$this->user->logout();
 
 		$this->flashMessage('Byl jste odhlášen');
 		$this->redirect('Homepage:default');
@@ -61,7 +60,6 @@ final class SignPresenter extends BasePresenter
 			$values = $form->getValues();
 
 			try {
-				$this->user->getStorage()->setNamespace('user');
 				$this->user->setAuthenticator($this->authenticator);
 				$this->user->login($values->mail, $values->password);
 				$this->user->setExpiration(0, TRUE);
