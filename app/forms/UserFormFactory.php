@@ -27,10 +27,12 @@ final class UserFormFactory
 		$form = new Form;
 
 		$form->addText('name', 'Jméno:')
-			->setRequired('Vyplňte prosím jméno');
+			->setRequired('Vyplňte prosím jméno')
+			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
 
 		$form->addText('surname', 'Příjmení:')
-			->setRequired('Vyplňte prosím příjmení');
+			->setRequired('Vyplňte prosím příjmení')
+			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
 
 //		$form->addCheckbox('skipControl', 'bez kontroly RČ')
 //			->setOmitted()
@@ -54,6 +56,7 @@ final class UserFormFactory
 			->setType('email')
 			->setEmptyValue('@')
 			->setRequired('Vyplňte prosím e-mail')
+			->addFilter(['\Nette\Utils\Strings', 'lower'])
 			->addRule(Form::EMAIL, 'Neplatný e-mail');
 
 		$form->addSubmit('ok', 'OK');
