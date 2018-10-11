@@ -46,7 +46,7 @@ final class Visit extends Entity
 
 	protected  function getterTypeTitle(): string
 	{
-		return ($this->type == self::TYPE_SPIRO) ? 'Spiroergometrie' : 'Sportovní prohlídka';
+		return ($this->type == self::TYPE_SPIRO) ? 'Funkční vyšetření' : 'Sportovní prohlídka';
 	}
 
 	/**
