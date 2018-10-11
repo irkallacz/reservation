@@ -39,9 +39,6 @@ final class ProfilePresenter extends UserPresenter
 		{
 			$values = $form->getValues();
 
-			$person = $this->orm->persons->getByRc($values->rc);
-			if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším rodným číslem!');
-
 			$person = $this->orm->persons->getByMail($values->mail);
 			if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším emailem!');
 		};
@@ -53,10 +50,8 @@ final class ProfilePresenter extends UserPresenter
 			$person = $this->person;
 			$person->name = $values->name;
 			$person->surname = $values->surname;
-			$person->rc = $values->rc;
 			$person->mail = $values->mail;
 			$person->phone = $values->phone;
-			$person->address = $values->address;
 
 			$this->orm->persistAndFlush($person);
 
