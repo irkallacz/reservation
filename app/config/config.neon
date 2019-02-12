@@ -41,9 +41,8 @@ routing:
     cache: true
 
 console:
+	url: https://rezervace.sportovnimedicina.tul.cz
 	catchExceptions: true
-	autoExit: false
-	url: https://contributte.com
 
 services:
 	router: App\RouterFactory::createRouter
