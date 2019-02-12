@@ -9,6 +9,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\Orm;
+use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
 
 /**
@@ -19,6 +20,10 @@ abstract class BasePresenter extends Presenter
 	/** @var Orm @inject */
 	public $orm;
 
+	/**
+	 * @param $element
+	 * @throws ForbiddenRequestException
+	 */
 	public function checkRequirements($element)
 	{
 		parent::checkRequirements($element);

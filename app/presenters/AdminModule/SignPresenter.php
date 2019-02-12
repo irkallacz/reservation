@@ -19,7 +19,7 @@ final class SignPresenter extends BasePresenter
 	/** @var AdminAuthenticator @inject*/
 	public $authenticator;
 
-	/** @var $backlink */
+	/** @var $backlink @persistent */
 	public $backlink = '';
 
 	/**
@@ -32,18 +32,6 @@ final class SignPresenter extends BasePresenter
 		$this->flashMessage('Byl jste odhlášen');
 		$this->redirect(':Homepage:default');
 	}
-
-	/**
-	 * @throws \Nette\Application\AbortException
-	 */
-	public function actionDefault()
-	{
-		if ($this->user->isLoggedIn())
-		{
-			$this->redirect('Reservation:default');
-		}
-	}
-
 	/**
 	 * @return Form
 	 */

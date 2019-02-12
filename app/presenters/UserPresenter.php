@@ -34,8 +34,6 @@ abstract class UserPresenter extends BasePresenter
 			$backlink = $this->storeRequest();
 			$this->redirect('Sign:', ['backlink' => $backlink]);
 		}
-
-		parent::checkRequirements($element);
 	}
 
 }

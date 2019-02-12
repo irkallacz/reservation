@@ -31,7 +31,7 @@ final class SignPresenter extends BasePresenter
 	/** @var UserAuthenticator @inject*/
 	public $authenticator;
 
-	/** @var $backlink */
+	/** @var $backlink @persistent */
 	public $backlink = '';
 
 	/** @var IMailer @inject*/
