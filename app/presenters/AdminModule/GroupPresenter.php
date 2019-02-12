@@ -89,7 +89,6 @@ final class GroupPresenter extends AdminPresenter {
 		if ($group) {
 			$group->active = $values->active;
 			$group->title = $values->title;
-			$group->title = $values->title;
 			if ($values->password) $group->password = $values->password;
 		}
 
