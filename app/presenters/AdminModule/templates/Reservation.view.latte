@@ -1,46 +1,42 @@
 {block head}
-<script src="{$basePath}/js/confirm.js"></script>
-<style type="text/css">
-    .close { color: red;}
-    .open { color: green; }
-    .small { font-size: small; }
-    .float-right { float: right; }
-    h1 { margin-bottom: 0}
-</style>
+	<script src="{$basePath}/js/jquery-1.11.3.min.js"></script>
+	<script src="{$basePath}/js/typeahead.jquery.js"></script>
+	<style type="text/css">
+		.small { font-size: small; }
+		.float-right { float: right; }
+		h1 { margin-bottom: 0}
+		input.typeahead { width: 35em; }
+		.tt-menu { background-color: white; border: 1px gray solid; cursor: pointer; padding: 1ex; font-size: 1em;}
+	</style>
+
 {/block}
 
 {block content}
 <h1 n:block="title">Termín {$visit->dateStart|date:'%A %d.%m.%Y %H:%M'|lower}-{$visit->dateEnd|date:'%H:%M'}</h1>
-    {*<p>*}
-        {*<span class="float-right"><a n:tag-if="$next" n:href="view, $next->id">Další</a></span>*}
-        {*<a n:tag-if="$prev" n:href="view, $prev->id">Předchozí</a>*}
-    {*</p>*}
+
+<p>
+	<span class="float-right"><a n:tag-if="$nextVisit" n:href="view $nextVisit->id">Další</a> 🡆</span>
+	🡄 <a n:tag-if="$prevVisit" n:href="view, $prevVisit->id">Předchozí</a>
+</p>
 
 <p class="float-right">
-    <a class="close"
-        n:href="delete $visit->id"
-        data-message="Opravdu chcete termín smazat?"
-    >Smazat</a>
+    <a class="red confirm" n:href="delete $visit->id" data-message="Opravdu chcete termín smazat?">Smazat</a>
 </p>
 
 <p>{if $visit->open}
-        <span class="open">Otevřeno</span>
-        <a class="close"
+        <span class="green">Otevřeno</span>
+        <a class="red"
            n:href="setOpen $visit->id, open => 0"
            data-message="Opravdu chcete termín uzavřít?"
         >Uzavřít</a>
     {else}
-        <span class="close">Uzavřeno</span>
-        <a class="open" n:if="!$visit->person" n:href="setOpen $visit->id, open => 1">Otevřít</a>
+        <span class="red">Uzavřeno</span>
+        <a class=green" n:if="!$visit->person" n:href="setOpen $visit->id, open => 1">Otevřít</a>
     {/if}
 </p>
 
 {control visitForm}
 
-<p>Typ vyšetření: {$visit->type ? 'Sportovní prohlídka' : 'Funkční vyšetření'}</p>
-<p n:if="$visit->note">Poznámka: {$visit->note}</p>
-
-<p><i>Poslední aktivita: {$visit->dateUpdate|date:'%d.%m.%Y %H:%M'} </i><p>
 {if $visit->person}
 <h2>Rezervace</h2>
 <p>
@@ -48,9 +44,44 @@
 	<a n:href="Patient:view $visit->person->id" target="_blank">{$visit->person->fullName}</a>
     <a n:href="logout $visit->id"
             data-message="Opravdu chcete osobu odhlásit?"
-            class="close"
+            class="red confirm"
     >Odhlásit</a>
-</p>
+	</p>
+	<p>
+		{$visit->person->mail}<br>
+		{if $visit->person->phone}{$visit->person->phone|number:0:'':' '}{/if}
+	</p>
 
- {/if}
+{else}
+	<h2>Přidat pacienta</h2>
+
+	{control addPatientForm}
+{/if}
+
+<p>Typ vyšetření: {$visit->type ? 'Sportovní prohlídka' : 'Funkční vyšetření'}</p>
+<p n:if="$visit->note">Poznámka: {$visit->note}</p>
+
+<p><i>Poslední aktivita: {$visit->dateUpdate|date:'%d.%m.%Y %H:%M'} </i><p>
+
+<p>🡅 <a n:href="default, week => $visit->dateStart->format('W'), year => $visit->dateStart->format('Y')">Zpět</a></p>
+
+<script type="application/javascript" src="{$basePath}/js/confirm.js"></script>
+
+<script type="application/javascript">
+	$('input.typeahead').typeahead({
+			minLength: 3,
+			highlight: true
+		},
+		{
+			display: 'title',
+			source: function(query, syncResults, asyncResults) {
+				$.get({link Patient:search}, { q : query }, function(data) {
+					asyncResults(data);
+				});
+			}
+		}).bind('typeahead:select', function(ev, suggestion) {
+		$('input#patient-id').val(suggestion.id);
+	});
+</script>
+
 {/block}

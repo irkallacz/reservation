@@ -293,4 +293,51 @@ final class ReservationPresenter extends AdminPresenter {
 
 		return $form;
 	}
+
+	protected function createComponentAddPatientForm()
+	{
+		$form = SearchUserFactory::create();
+
+		$form->onSuccess[] = function (Form $form, ArrayHash $values){
+			if ((isset($values->id))and($values->id)){
+				$person = $this->orm->persons->getById($values->id);
+
+				$visitId = $this->getParameter('id');
+				$visit = $this->orm->visits->getById($visitId);
+				$visit->person = $person;
+				$visit->open = FALSE;
+
+				$this->orm->persistAndFlush($visit);
+
+				$this->flashMessage('Pacient byl přihlášen na termín');
+
+				if ($values->send){
+					$mail = Email::newMessage();
+					$mail->addTo($person->mail, $person->fullName);
+					$mail->setSubject('Rezervace prohlídky '.$visit->dateStart->format('d.m.Y \v H:i'));
+
+					$template = $this->createTemplate();
+					$template->setFile(__DIR__.'../templates/Email/reservation.latte');
+					$template->date = $visit->dateStart;
+					$mail->setBody($template);
+
+					$template = $this->createTemplate();
+					$template->setFile(__DIR__.'../templates/Email/event.latte');
+					$template->visit = $visit;
+					$event = (string) $template;
+					$event = str_replace("\n","\r\n", $event);
+					$mail->addAttachment('event.ics', $event);
+
+					$this->mailer->send($mail);
+
+					$this->flashMessage('Email byl odeslán');
+				}
+
+				$this->redirect('this');
+			}
+		};
+
+		return $form;
+	}
+
 }
