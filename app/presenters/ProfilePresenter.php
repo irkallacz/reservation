@@ -9,11 +9,14 @@
 namespace App\Presenters;
 
 use App\Forms\GroupLogInFormFactory;
+use App\Forms\PasswordFormFactory;
 use App\Forms\UserFormFactory;
 use App\Forms\VisitRequestFormFactory;
 use App\Model\Orm\VisitRequest;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Form;
 use Nette\Security\Passwords;
+use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
 final class ProfilePresenter extends UserPresenter
@@ -35,6 +38,18 @@ final class ProfilePresenter extends UserPresenter
 	{
 		$form = UserFormFactory::create();
 
+		$form->addText('address', 'Adresa:', 40)
+			->setNullable();
+
+		$form->addText('rc', 'Rodné číslo:', 11)
+			->setAttribute('placeholder', '______/____')
+			->setOption('description', '(000000/0000)')
+			->setNullable()
+			->addCondition(Form::FILLED)
+				->addRule(Form::PATTERN, 'Jste si jistí rodným číslem?', '[0-9]{2}[0156][0-9][0-3][0-9]/[0-9]{3,4}');
+
+		$form->addSubmit('ok', 'OK');
+
 		$form->onValidate[] = function (Form $form)
 		{
 			$values = $form->getValues();
@@ -52,6 +67,8 @@ final class ProfilePresenter extends UserPresenter
 			$person->surname = $values->surname;
 			$person->mail = $values->mail;
 			$person->phone = $values->phone;
+			$person->address = $values->address;
+			$person->rc = $values->rc;
 
 			$this->orm->persistAndFlush($person);
 

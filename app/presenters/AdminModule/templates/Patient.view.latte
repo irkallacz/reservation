@@ -1,36 +1,55 @@
+{block head}
+	<style type="text/css">
+		#person tr th { text-align: left; }
+	</style>
+{/block}
+
 {block content}
 
 	<h1 n:block="title">Profil pacienta</h1>
 
-	<table>
-		<tr><th>Příjmení</th><td>{$person->surname}</td></tr>
-		<tr><th>Jméno</th><td>{$person->name}</td></tr>
-		<tr><th>RČ</th><td>{$person->rc}</td></tr>
-		<tr><th>Email</th><td>{$person->mail}</td></tr>
-		<tr><th>Telefon</th><td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td></tr>
-		<tr><th>Adresa</th><td>{$person->address}</td></tr>
-	</table>
+	<p class="float-right">
+		<a class="confirm red" data-message="Opravdu chcete pacienta smazat?" n:href="Patient:delete $person->id">Smazat</a>
+	</p>
 
-	{*<p><a n:href="edit $person->id">Upravit osobní údaje</a></p>*}
+	{if ($edit)}
+		{control patientForm}
+	{else}
+		<table id="person">
+			<tr><th>Příjmení:</th><td>{$person->surname}</td></tr>
+			<tr><th>Jméno:</th><td>{$person->name}</td></tr>
+			<tr><th>Telefon:</th><td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td></tr>
+			<tr><th>Email:</th><td>{$person->mail}</td></tr>
+			<tr><th>Rodné číslo:</th><td>{$person->rc}</td></tr>
+			<tr><th>Adresa:</th><td>{$person->address}</td></tr>
+		</table>
+
+		<p n:if="$person->note">{$person->note}</p>
+
+		<p><a n:href="this edit => true">Upravit osobní údaje</a></p>
+	{/if}
 
 	<h2>Skupiny</h2>
 	<ul n:inner-foreach="$person->groups as $group">
-		<li n:class="$group->active ? old">{$group->title} {*<a n:href="groupLogOut $group->id">Odepsat</a>*}</li>
+		<li n:class="$group->active ? old">{$group->title} <a n:href="groupLogOut $person->id, $group->id">Odepsat</a></li>
 	</ul>
 
-	{*<p><a n:href="groupLogIn">Zapsat se do skupiny</a></p>*}
+	{control groupForm}
 
-	<h2>Žádosti o prohlídku</h2>
 	{if $person->visitRequest}
+		<h2>Žádosti o prohlídku</h2>
 		<p n:class="$request->active ? old">{$request->active ? Aktivní : Neaktiví} žádost na vyšetření od {$request->dateStart|date:'d.m.Y'} do {$request->dateEnd|date:'d.m.Y'}
 			ve dnech: {$request->getDaysInString()}. {*<a n:href="visitRequest">Upravit žádost</a>.*}</p>
 	{/if}
 
+	{if}
 	<h2>Rezervace</h2>
 	<ol n:inner-foreach="$person->visits as $visit">
-		<li n:class="$visit->isOver ? old">{$visit->dateStart|date:'d.m.Y H:i'} {if !$visit->isOver}{*<a n:href="Reservation:logOut">Zrušit</a>*}{/if}</li>
+		<li n:class="$visit->isOver ? old"> <a n:href="Reservation:view $visit->id">{$visit->dateStart|date:'d.m.Y H:i'}</a></li>
 	</ol>
+	{/if isset($visit)}
 
 	<p><i>Poslední aktivita: {$person->dateUpdate|date:'%d.%m.%Y %H:%M'}</i><p>
 
+	<script src="{$basePath}/js/confirm.js"></script>
 {/block}

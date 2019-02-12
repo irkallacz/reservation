@@ -1,24 +1,32 @@
+{block head}
+	<style type="text/css">
+		table th, table td{ text-align: left }
+	</style>
+{/block}
+
 {block content}
 
 <h1 n:block="title">Váš profil</h1>
 
 	<table>
-		<tr><th>Příjmení</th><td>{$person->surname}</td></tr>
-		<tr><th>Jméno</th><td>{$person->name}</td></tr>
-		{*<tr><th>RČ</th><td>{$person->rc}</td></tr>*}
-		<tr><th>Email</th><td>{$person->mail}</td></tr>
-		<tr><th>Telefon</th><td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td></tr>
-		{*<tr><th>Adresa</th><td>{$person->address}</td></tr>*}
+		<tr><th>Příjmení:</th><td>{$person->surname}</td></tr>
+		<tr><th>Jméno:</th><td>{$person->name}</td></tr>
+		<tr><th>Email:</th><td>{$person->mail}</td></tr>
+		<tr><th>Telefon:</th><td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td></tr>
+		<tr n:if="$person->address"><th>Adresa:</th><td>{$person->address}</td></tr>
+		<tr n:if="$person->rc"><th>RČ:</th><td>{$person->rc}</td></tr>
 	</table>
 
-	<p><a n:href="edit">Upravit osobní údaje</a></p>
+	<p>✍️ <a n:href="edit">Upravit osobní údaje</a></p>
+	<p>🔑 <a n:href="password">Změnit heslo</a></p>
+	<p>🖨️ <a n:href="personalForm">Stáhnout předvyplněný souhlas s vyšetřením</a></p>
 
 	<h2>Vaše skupiny</h2>
 	<ul n:inner-foreach="$person->groups as $group">
 		<li n:class="$group->active ? old">{$group->title} <a n:href="groupLogOut $group->id">Odepsat</a></li>
 	</ul>
 
-	<p><a n:href="groupLogIn">Zapsat se do skupiny</a></p>
+	<p>✔ <a n:href="groupLogIn">Zapsat se do skupiny</a></p>
 
 	<h2>Žádosti o prohlídku</h2>
 	{if $request}
