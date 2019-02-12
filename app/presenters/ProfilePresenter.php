@@ -80,6 +80,24 @@ final class ProfilePresenter extends UserPresenter
 	}
 
 	/**
+	 * @return Form
+	 */
+	protected function createComponentPasswordForm(): Form
+	{
+		$form = PasswordFormFactory::create();
+
+		$form->onSuccess[] = function (Form $form, ArrayHash $values){
+			$this->person->password = Passwords::hash($values->password);
+			$this->orm->persons->persistAndFlush($this->person);
+
+			$this->flashMessage('Heslo bylo změněno');
+			$this->redirect('default');
+		};
+
+		return $form;
+	}
+
+	/**
 	 *
 	 */
 	public function actionEdit()
@@ -112,8 +130,7 @@ final class ProfilePresenter extends UserPresenter
 			}
 		};
 
-		$form->onSuccess[] = function (Form $form){
-			$values = $form->getValues();
+		$form->onSuccess[] = function (Form $form, ArrayHash $values){
 			$this->person->groups->add($values->group);
 			$this->orm->persistAndFlush($this->person);
 
@@ -126,7 +143,7 @@ final class ProfilePresenter extends UserPresenter
 
 	/**
 	 * @param int $id
-	 * @throws \Nette\Application\AbortException
+	 * @throws AbortException
 	 */
 	public function actionGroupLogOut(int $id)
 	{

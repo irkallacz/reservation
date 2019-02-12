@@ -49,7 +49,7 @@ final class UserAuthenticator implements IAuthenticator {
 		}
 
 		$person->dateUpdate = new \DateTimeImmutable();
-
+		if (Passwords::needsRehash($person->password)) $person->password = Passwords::hash($password);
 		$this->orm->persistAndFlush($person);
 
 		return new Identity($person->id, 'user');
