@@ -32,6 +32,7 @@ final class RecoverPasswordFormFactory
 			->setEmptyValue('@')
 			->setAttribute('autofocus')
 			->setRequired('Vyplňte prosím e-mail')
+			->addFilter(['\Nette\Utils\Strings', 'lower'])
 			->addRule(Form::EMAIL,'Neplatný e-mail');
 
 		$form->addSubmit('ok', 'OK');
