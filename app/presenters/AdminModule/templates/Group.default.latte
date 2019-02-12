@@ -1,7 +1,27 @@
 {block head}
 <style type="text/css" media="all">
     #groupForm td { text-align: center; }
+
+    .persons { border-collapse: collapse; width: 100%;}
+    .persons, .persons table td, .persons table th { border: 1px solid gray; padding: 1px 5px;}
+    .persons tr:nth-child(2n) td { background-color: azure;}
+    .persons th.sorting_asc { text-decoration: underline;}
+    .persons th.sorting_desc { text-decoration: overline;}
+    .persons thead tr th { background-color: #3484d2; color: white;}
+    .dataTables_filter { margin-bottom: 1em;}
+    .dataTables_filter label { font-weight: bold}
+    .hidden { display: none; }
 </style>
+<script src="{$basePath}/js/jquery-1.11.3.min.js"></script>
+<script src="{$basePath}/js/jquery.dataTables.min.js"></script>
+
+<script type="application/javascript">
+	   $(document).ready(function() {
+	       $('.persons').DataTable( {
+	           "paging": false, "info": false
+	       } );
+	   } );
+</script>
 {/block}
 
 {block content}
@@ -18,5 +38,41 @@
 <h2>Přidání skupiny</h2>
 
     {control addGroupForm}
+
+
+<h2>Seznam přihlášených</h2>
+{foreach $groups->findBy(['active' => TRUE]) as $group}
+	<h3>{$group->title}</h3>
+    <table class="persons">
+        <thead>
+        <tr>
+            <th>Příjmení a jméno</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Termín</th>
+            <th>Aktivita</th></tr>
+        </thead>
+        <tbody>
+		{foreach $group->persons as $person}
+            <tr>
+				<td><a n:href="Patient:view $person->id">{$person->fullName}</a></td>
+                <td>{$person->mail}</td>
+                <td>{$person->phone}</td>
+                <td>
+					{var $term = $person->getLastVisit()}
+					{if $term}
+                        <span class="hidden">{$term->dateStart|date:'%Y-%m-%d %H:%M'}</span>
+                        <a n:href="Reservation:view $term->id">{$term->dateStart|date:'%d.%m.%Y %H:%M'}</a>
+					{/if}
+                </td>
+                <td>
+                    <span class="hidden">{$person->dateUpdate|date:'%Y-%m-%d %H:%M'}</span>
+					{$person->dateUpdate|date:'%d.%m.%Y %H:%M'}
+                </td>
+            </tr>
+		{/foreach}
+        </tbody>
+    </table>
+{/foreach}
 
 {/block}
