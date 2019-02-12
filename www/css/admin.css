@@ -14,7 +14,7 @@ a:hover, a:active, a:focus { background-color: #006aeb; text-decoration: none; c
 
 .logo .title {text-transform: uppercase; text-decoration: none; font-weight: bold; display: block;}
 .logo #csm { font-size: 1.8em; font-style: italic; color: #006aeb}
-.logo #name {font-family: serif; font-size: 2.1em; color: #556080; color: #333; font-style: normal; margin-bottom: 0.5ex;}
+.logo #name {font-family: serif; font-size: 2.1em; color: #333; font-style: normal; margin-bottom: 0.5ex; text-shadow: 0 0 20px white;}
 
 .logo a.logout {position: absolute; bottom: 0; right: 0; text-decoration: none; background-color: white; padding: 1ex;}
 
