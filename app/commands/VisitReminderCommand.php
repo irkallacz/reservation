@@ -63,14 +63,13 @@ final class VisitReminderCommand extends Command {
 
 		$latte = new \Latte\Engine;
 
-		foreach ($visits as $visit)
-		{
+		foreach ($visits as $visit) {
 			$person = $visit->person;
 
 			$mail = Email::newMessage();
 			$mail->addTo($person->mail, $person->fullName);
 			$mail->setSubject('Připomínka vyšetření');
-			$mail->setBody($latte->renderToString(__DIR__.'/../app/presenters/templates/Email/reminder.latte', ['date' => $visit->dateStart]));
+			$mail->setBody($latte->renderToString(__DIR__ . '/../presenters/templates/Email/reminder.latte', ['date' => $visit->dateStart]));
 
 			$this->mailer->send($mail);
 

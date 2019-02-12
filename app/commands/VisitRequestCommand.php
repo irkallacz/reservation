@@ -88,7 +88,7 @@ final class VisitRequestCommand extends Command
 						$mail = Email::newMessage();
 						$mail->addTo($person->mail, $person->fullName);
 						$mail->setSubject('Uvolněné místo na vyšetření');
-						$mail->setBody($latte->renderToString(__DIR__.'/../app/presenters/templates/Email/request.latte', ['date' => $visit->dateStart]));
+						$mail->setBody($latte->renderToString(__DIR__ . '/../app/presenters/templates/Email/request.latte', ['date' => $visit->dateStart]));
 
 						$this->mailer->send($mail);
 
