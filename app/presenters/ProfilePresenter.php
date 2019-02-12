@@ -176,6 +176,30 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 *
 	 */
+	public function actionPersonalForm() {
+		$fields = [
+			'fullName' => $this->person->fullName,
+			'rc' => $this->person->rc,
+			'address' => $this->person->address,
+			'mail' => $this->person->mail,
+		];
+
+		if ($this->person->getNextVisit()) {
+			$fields['dateVisit'] = $this->person->getNextVisit()->dateStart->format('d. m. Y');
+		}
+
+		$pdf = new \FPDM(__DIR__.'/templates/form.pdf');
+		$pdf->Load($fields, true);
+		$pdf->Merge();
+
+
+		$pdf->Output('D', $this->person->fullName.'.pdf');
+	}
+
+
+	/**
+	 *
+	 */
 	public function actionVisitRequest()
 	{
 		if  ($this->person->visitRequest)
