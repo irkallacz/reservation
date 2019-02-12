@@ -26,12 +26,12 @@ final class UserFormFactory
 
 		$form = new Form;
 
-		$form->addText('name', 'Jméno:')
-			->setRequired('Vyplňte prosím jméno')
-			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
-
 		$form->addText('surname', 'Příjmení:')
 			->setRequired('Vyplňte prosím příjmení')
+			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
+
+		$form->addText('name', 'Jméno:')
+			->setRequired('Vyplňte prosím jméno')
 			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
 
 //		$form->addCheckbox('skipControl', 'bez kontroly RČ')
@@ -48,9 +48,11 @@ final class UserFormFactory
 //		$form->addText('address', 'Adresa:', 40)
 //			->setRequired('Vyplňte prosím adresu');
 
-		$form->addText('phone', 'Telefon:', 9)
+		$form->addText('phone', 'Telefon:', 9, 9)
 			->setType('tel')
-			->setRequired('Vyplňte prosím telefon');
+			->setRequired('Vyplňte prosím telefon')
+			->addCondition(Form::FILLED)
+			->addRule(Form::LENGTH, 'Telefon musí mít %d číslic', 9);
 
 		$form->addText('mail', 'E-mail:', 40)
 			->setType('email')
@@ -58,8 +60,6 @@ final class UserFormFactory
 			->setRequired('Vyplňte prosím e-mail')
 			->addFilter(['\Nette\Utils\Strings', 'lower'])
 			->addRule(Form::EMAIL, 'Neplatný e-mail');
-
-		$form->addSubmit('ok', 'OK');
 
 		$form->addProtection('Vypršel časový limit, odešlete prosím formulář znovu');
 
