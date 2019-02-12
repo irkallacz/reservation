@@ -31,7 +31,7 @@ use Nextras\Orm\Relationships\OneHasMany;
 
  * @property ManyHasMany|Group[]  	$groups 		{m:m Group::$persons}
 
- * @property DateTimeImmutable      $dateUpdate
+ * @property DateTimeImmutable      $dateUpdate		{default now}
 
  * @property VisitRequest|null  	$visitRequest	{1:1 VisitRequest::$person}
  * @property OneHasMany|Visit[]		$visits			{1:m Visit::$person, orderBy=[dateStart=ASC]}

@@ -25,7 +25,7 @@ use Nextras\Orm\Relationships\OneHasMany;
 
  * @property ManyHasMany|Person[]  			$persons  		{m:m Person::$groups, isMain=true, orderBy=[surname=ASC, name=ASC]}
  *
- * @property DateTimeImmutable      		$dateUpdate
+ * @property DateTimeImmutable      $dateUpdate		{default now}
 
  * @property OneHasMany|Visit[]				$visits				{1:m Visit::$group}
  * @property-read string      				$roleName 			{virtual}
