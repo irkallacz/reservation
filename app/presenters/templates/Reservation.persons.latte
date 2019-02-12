@@ -44,10 +44,10 @@
                     <td n:if="$user->isInRole('admin')">{$person->rc}</td>
                     <td>{$person->mail}</td>
                     <td>
-                        {var $term = $person->getNextVisit()}
+                        {var $term = $person->getLastVisit()}
                         {if $term}
                             <span class="hidden">{$term->dateStart|date:'%Y-%m-%d %H:%M'}</span>
-                            <a n:tag-if="$user->isInRole('admin')" n:href="Admin:visit, $term->id">{$term->dateStart|date:'%d.%m.%Y %H:%M'}</a>
+                            {$term->dateStart|date:'%d.%m.%Y %H:%M'}
                         {/if}
                     </td>
                     <td>

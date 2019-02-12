@@ -8,6 +8,7 @@
 
 namespace App\Model\Orm;
 
+use Nextras\Orm\Collection\Collection;
 use Nextras\Orm\Entity\Entity;
 use DateTimeImmutable;
 use Nextras\Orm\Relationships\ManyHasMany;
@@ -56,6 +57,14 @@ final class Person extends Entity
 		return $this->visits->get()->getBy([
 			'dateStart>' => new DateTimeImmutable(),
 		]);
+	}
+
+	/**
+	 * @return Visit|\Nextras\Orm\Entity\IEntity|null
+	 */
+	public function getLastVisit()
+	{
+		return $this->visits->get()->orderBy('dateStart', Collection::DESC)->fetch();
 	}
 
 }
