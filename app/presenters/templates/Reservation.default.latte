@@ -19,13 +19,12 @@
 
     {if $term}
         <p>Aktuálně máte rezervovaný termín na <b>{$term->dateStart|date:'%A %d.%m.%Y v %H:%M'|lower}</b>.</p>
-        <p n:if="($term->canLogOut)" class="center"><a n:href="logOut">Zrušit tento termín</a></p>
+        <p n:if="($term->canLogOut)" class="center">🗙 <a n:href="logOut">Zrušit tento termín</a></p>
 
 		<h2>Detaily vyšetření</h2>
 		<p>Pokud chtete upřesnit <a href="https://sportovnimedicina.tul.cz/sluzby" target="_blank">typ vyšetření</a> nebo zanechat nějakou poznámku, můžete je vyplnit níže.</p>
 		{control visitForm}
-{else}
-
+	{else}
 		<p>Cca týden předem si můžete rezervovat jakýkoliv neobsazený termín.
 			Stejně tak můžete zrušit svoji rezervaci maximálně týden předem.
 			V akutních případech nám můžete napsat na náš e-mail nebo zavolat.<p>
