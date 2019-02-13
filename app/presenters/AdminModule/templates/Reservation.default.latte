@@ -10,13 +10,13 @@
 		header { text-align: center; margin-bottom: 1em;}
 		.day .event:nth-child(7), .hours .hour:nth-child(6)  { margin-top: 1em;}
 		.visit { height: 100%; background-color: lightgreen; padding: 0 0.5ex; {*position: relative;*}}
-		.visit.spiro { border-left: #006aeb 5px solid;}
+		.visit.spiro { border-right: #006aeb 5px solid;}
 		.visit.old { background-color: greenyellow;}
 		.visit.closed { background-color: lightcoral;}
 		.visit.full { background-color: orangered;}
-		.visit a.edit { float: right; text-decoration: none; }
+		.visit a.edit { float: right; text-decoration: none; font-weight: bold;}
 
-		.now { background-color: red; position: absolute; width: 100%; height: 2px;}
+		.now { background-color: gold; position: absolute; width: 100%; height: 2px;}
 	</style>
 {/block}
 
@@ -29,9 +29,9 @@
 		<a n:href="this year => intval(date('Y')), week => intval(date('W'))">Dnes</a>
 	</div>
 	<div class="control text-center">
-		<a n:href="this year => $prev->format('Y'), week => intval($prev->format('W'))">◀</a>
+		<a n:href="this year => intval($prev->format('Y')), week => intval($prev->format('W'))">◀</a>
 		<a n:href="this">Týden {$dateStart|date:'W'}</a>
-		<a n:href="this year => $next->format('Y'), week => intval($next->format('W'))">▶</a>
+		<a n:href="this year => intval($next->format('Y')), week => intval($next->format('W'))">▶</a>
 	</div>
 	<div class="control text-right">
 		{control calendarForm}
@@ -75,17 +75,17 @@
 				</div>
 			{/foreach}
 
-			<hr n:if="($day == date('d.m.Y'))and($top)" class="now" style="top: {$top|noescape}em">
+			<hr n:if="($day == date('d.m.Y'))and($top)" class="now" style="top: {$top|number:2:'.':''|noescape}em">
 		</article>
 	{/foreach}
 </div>
 {/form}
 
 <script type="application/javascript">
-	document.querySelectorAll('input.day-checkbox').forEach(function (value) {
-		value.addEventListener('click', function (event) {
-			document.querySelectorAll('input.'+value.value).forEach(function (checkbox) {
-				checkbox.checked = value.checked;
+	document.querySelectorAll('input.day-checkbox').forEach(function (day) {
+		day.addEventListener('click', function (event) {
+			document.querySelectorAll('input.'+day.value).forEach(function (checkbox) {
+				checkbox.checked = day.checked;
 			});
 		});
 	})
