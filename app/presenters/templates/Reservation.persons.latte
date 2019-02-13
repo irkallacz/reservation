@@ -14,11 +14,11 @@
     .nonactive { color: gray; }
 </style>
 <script type="application/javascript">
-//    $(document).ready(function() {
-//        $('.persons').DataTable( {
-//            "paging": false, "info": false
-//        } );
-//    } );
+   $(document).ready(function() {
+       $('.persons').DataTable( {
+           "paging": false, "info": false
+       } );
+   } );
 </script>
 {/block}
 
@@ -31,7 +31,6 @@
         <thead>
             <tr>
 				<th>Příjmení</th><th>Jméno</th>
-				<th n:if="$user->isInRole('admin')">RC</th>
 				<th>Email</th>
 				<th>Termín</th>
 				<th>Aktivita</th></tr>
@@ -41,7 +40,6 @@
                 <tr>
                     <td>{$person->surname}</td>
                     <td>{$person->name}</td>
-                    <td n:if="$user->isInRole('admin')">{$person->rc}</td>
                     <td>{$person->mail}</td>
                     <td>
                         {var $term = $person->getLastVisit()}
