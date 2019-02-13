@@ -13,7 +13,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nextras\Orm\Collection\ICollection;
 
-final class VisitFormFactory
+final class ReservationFormFactory
 {
 	use Nette\SmartObject;
 
@@ -36,7 +36,7 @@ final class VisitFormFactory
 	public function create(): Form
 	{
 
-		$form = new Form;
+		$form = VisitFormFactory::create();
 
 		$groups = $this->groups->fetchPairs('id','title');
 
@@ -44,6 +44,8 @@ final class VisitFormFactory
 
 		$form->addSelect('group', 'Skupina:')
 			->setItems($groups);
+
+		$form->addSubmit('ok', 'Uložit');
 
 		return $form;
 	}
