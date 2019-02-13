@@ -8,14 +8,24 @@
 
 namespace App\AdminModule\Presenters;
 
-use App\Forms\VisitFormFactory;
+use App\Forms\SearchUserFactory;
+use App\Forms\ReservationFormFactory;
+use App\Model\Email;
 use App\Model\Orm\Visit;
 use Nette\Application\UI\Form;
 use Nette\Forms\Controls\Button;
+use Nette\Mail\IMailer;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
+use Nextras\Orm\Entity\IEntity;
 use Tracy\Debugger;
 
 final class ReservationPresenter extends AdminPresenter {
+
+	/**
+	 * @var IMailer @inject
+	 */
+	public $mailer;
 
 	/**
 	 * @param int $year
@@ -33,8 +43,8 @@ final class ReservationPresenter extends AdminPresenter {
 		$dateStart->setTime(8, 0, 0);
 		$dateEnd = $dateStart->modifyClone('+6 day');
 
-		$this->template->next = $dateStart->modifyClone('+ 1 week');
-		$this->template->prev = $dateStart->modifyClone('- 1 week');
+		$this->template->next = $dateEnd->modifyClone('+ 1 week');
+		$this->template->prev = $dateEnd->modifyClone('- 1 week');
 
 		$days = new \DatePeriod($dateStart, new \DateInterval('P1D'), 4);
 
@@ -74,8 +84,15 @@ final class ReservationPresenter extends AdminPresenter {
 
 		$now = new DateTime();
 		$top = (intval($now->format('H'))-7) * 4 + intval($now->format('i')) / 15;
+		if ($top > 20) $top = $top - 4;
 
 		$this->template->top = $top;
+	}
+
+	private static function getFormData(Button $sender, string $key):array
+	{
+		$form = $sender->getForm();
+		return $form->getHttpData($form::DATA_TEXT | $form::DATA_KEYS, $key);
 	}
 
 	/**
@@ -83,10 +100,10 @@ final class ReservationPresenter extends AdminPresenter {
 	 */
 	protected function createComponentReservationForm():Form
 	{
-		$visitFormFactory = new VisitFormFactory(
+		$reservationFormFactory = new ReservationFormFactory(
 		 	$this->orm->groups->findAll()->orderBy('title')
 		);
-		$form = $visitFormFactory->create();
+		$form = $reservationFormFactory->create();
 
 		$form->addCheckbox('open', 'Otevřeno')
 			->setDefaultValue(TRUE);
@@ -101,8 +118,7 @@ final class ReservationPresenter extends AdminPresenter {
 
 		$form->addSubmit('delete', 'Smazat')
 			->onClick[] = function (Button $button){
-				$form = $button->getForm();
-				$visits = $form->getHttpData($form::DATA_TEXT | $form::DATA_KEYS, 'visit[]');
+				$visits = self::getFormData($button, 'visit[]');
 				foreach ($visits as $id){
 					$visit = $this->orm->visits->getById($id);
 					$this->orm->remove($visit);
@@ -113,10 +129,8 @@ final class ReservationPresenter extends AdminPresenter {
 		};
 
 		$form->addSubmit('change', 'Změnit')
-			->onClick[] = function (Button $button){
-				$form = $button->getForm();
-				$values = $form->getValues();
-				$visits = $form->getHttpData($form::DATA_TEXT | $form::DATA_KEYS, 'visit[]');
+			->onClick[] = function (Button $button, ArrayHash $values){
+				$visits = $visits = self::getFormData($button, 'visit[]');
 				foreach ($visits as $id){
 					$visit = $this->orm->visits->getById($id);
 					$visit->dateLimit = $values->dateLimit ? $values->dateLimit : $visit->dateLimit;
@@ -130,11 +144,8 @@ final class ReservationPresenter extends AdminPresenter {
 		};
 
 		$form->addSubmit('add', 'Přidat')
-			->onClick[] = function (Button $button){
-				$form = $button->getForm();
-				$values = $form->getValues();
-				$events = $form->getHttpData($form::DATA_TEXT | $form::DATA_KEYS, 'event[]');
-
+			->onClick[] = function (Button $button, ArrayHash $values){
+				$events = $visits = self::getFormData($button, 'event[]');
 				foreach ($events as $date){
 					$visit = new Visit();
 					$visit->dateStart = new \DateTimeImmutable($date);
@@ -161,8 +172,10 @@ final class ReservationPresenter extends AdminPresenter {
 		$visit = $this->orm->visits->getById($id);
 		$this->template->visit = $visit;
 
-		if ($visit->group) $this['visitForm']['group']->setDefaultValue($visit->group->id);
-		$this['visitForm']['dateLimit']->setDefaultValue($visit->dateLimit);
+		$this->template->prevVisit = $this->orm->visits->getBy(['dateEnd' => $visit->dateStart]);
+		$this->template->nextVisit = $this->orm->visits->getBy(['dateStart' => $visit->dateEnd]);
+
+		$this['visitForm']->setDefaults($visit->toArray(IEntity::TO_ARRAY_RELATIONSHIP_AS_ID));
 	}
 
 	/**
@@ -214,22 +227,21 @@ final class ReservationPresenter extends AdminPresenter {
 	 */
 	protected function createComponentVisitForm(): Form
 	{
-		$visitFormFactory = new VisitFormFactory(
+		$visitFormFactory = new ReservationFormFactory(
 			$this->orm->groups->findAll()->orderBy('title')
 		);
 		$form = $visitFormFactory->create();
 
 		$form['group']->setPrompt('');
 
-		$form->addSubmit('ok', 'Uložit');
-
-		$form->onSuccess[] = function (Form $form){
-			$values = $form->getValues();
+		$form->onSuccess[] = function (Form $form, ArrayHash $values){
 			$id = $this->getParameter('id');
 
 			$visit = $this->orm->visits->getById($id);
 			$visit->dateLimit = $values->dateLimit;
 			$visit->group = $values->group;
+			$visit->type = $values->type;
+			$visit->note = $values->note;
 			$this->orm->visits->persistAndFlush($visit);
 
 			$this->flashMessage('Termín byl aktualizován');
