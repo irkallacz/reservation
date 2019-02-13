@@ -8,12 +8,15 @@
 
 namespace App\Presenters;
 
+use App\Forms\VisitFormFactory;
 use App\Model\Email;
 use App\Model\Orm\Visit;
+use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Form;
 use Nette\Mail\IMailer;
+use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
 /**
@@ -53,7 +56,6 @@ final class ReservationPresenter extends UserPresenter
 		$days = [];
 		$groups = [];
 
-
 		$visits = $this->orm->visits->findFutureByGroup(NULL);
 		foreach ($visits as $visit) {
 			$days[$visit->dateStart->format('Y-m-d')][$visit->id] = $visit;
@@ -75,7 +77,7 @@ final class ReservationPresenter extends UserPresenter
 	 * @param int $id
 	 * @throws BadRequestException
 	 * @throws ForbiddenRequestException
-	 * @throws \Nette\Application\AbortException
+	 * @throws AbortException
 	 */
 	public function actionLogIn(int $id) {
 		$visit = $this->orm->visits->getById($id);
@@ -124,7 +126,7 @@ final class ReservationPresenter extends UserPresenter
 
 	/**
 	 * @throws ForbiddenRequestException
-	 * @throws \Nette\Application\AbortException
+	 * @throws AbortException
 	 */
 	public function actionLogOut() {
 		$visit = $this->person->getNextVisit();
@@ -151,19 +153,11 @@ final class ReservationPresenter extends UserPresenter
 	 */
 	protected function createComponentVisitForm(): Form
 	{
-		$form = new Form;
+		$form = VisitFormFactory::create();
 
-		$form->addRadioList('type', 'Typ vyšetření', [Visit::TYPE_ECG => 'Sportovní prohlídka', Visit::TYPE_SPIRO => 'Funkční vyšetření'])
-			->setDefaultValue(Visit::TYPE_ECG)
-			->getSeparatorPrototype()->setName(NULL);
-
-		$form->addTextArea('note', 'Poznámka', 50)
-			->setNullable();
 		$form->addSubmit('ok', 'Uložit');
 
-		$form->onSuccess[] = function (Form $form) {
-			$values = $form->getValues();
-
+		$form->onSuccess[] = function (Form $form, ArrayHash $values) {
 			$visit = $this->person->getNextVisit();
 			$visit->note = $values->note;
 			$visit->type = $values->type;
