@@ -86,12 +86,18 @@ final class ReservationPresenter extends UserPresenter
 		if (!$visit->canLogIn) throw new ForbiddenRequestException('Na termín se již nedá přihlásit');
 		if (($visit->group) and (!$this->person->groups->has($visit->group))) throw new ForbiddenRequestException('Tento termín nepatří žádné vaší skupině');
 
-		$lastVisit = $this->person->getNextVisit();
+		$nextVisit = $this->person->getNextVisit();
+		if ($nextVisit) {
+			$this->person->visits->remove($nextVisit);
+			$nextVisit->logOut();
+			$this->flashMessage('Vaše rezervace na termín ' . $nextVisit->dateStart->format('d.m.Y \v H:i'). ' byla zrušena', 'notice');
+			$this->orm->persistAndFlush($nextVisit);
+		}
 
-		if ($lastVisit) {
-			$this->person->visits->remove($lastVisit);
-			$lastVisit->logOut();
-			$this->orm->persistAndFlush($lastVisit);
+		$visitRequest = $this->person->visitRequest;
+		if ($visitRequest) {
+			$this->flashMessage('Vaše žádost o vyšetření byla zrušena', 'notice');
+			$this->orm->remove($visitRequest);
 		}
 
 		$visit->person = $this->person;

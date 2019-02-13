@@ -26,10 +26,11 @@ a:hover, a:active, a:focus { background-color: #006aeb; text-decoration: none; c
 
 ul.flash, ul.error {  padding-top: 0.5em; padding-bottom: 0.5em; border-radius: 1em; border: 1px solid black;
     font-family: sans-serif; list-style-type: none; padding-left: 1em;}
-ul.flash {background-color:  #bace29; color: darkgreen; border-color: darkgreen;}
+ul.info {background-color:  #bace29; color: darkgreen; border-color: darkgreen;}
 ul.error {background-color: rgba(255,0,0,0.5); color: darkred; border-color: darkred;}
 ul.error li:before {content: '❢'; padding-right: 1ex;}
-ul.flash li:before {content: '✔'; padding-right: 1ex;}
+ul.notice li:before {content: '...'; padding-right: 1ex;}
+ul.info li:before {content: '✔'; padding-right: 1ex;}
 
 form table th {text-align: left}
 
