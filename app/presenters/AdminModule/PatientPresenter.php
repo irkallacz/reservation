@@ -9,10 +9,21 @@
 namespace App\AdminModule\Presenters;
 
 
+use App\Forms\GroupLogInFormFactory;
+use App\Forms\PatientFormFactory;
+use App\Forms\UserFormFactory;
+use Nette\Application\Responses\JsonResponse;
+use Nette\Application\Responses\TextResponse;
+use Nette\Application\UI\Form;
 use Nette\Forms\Container;
+use Nette\Forms\Controls\BaseControl;
+use Nette\Forms\Controls\TextInput;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\Json;
 use Nette\Utils\Paginator;
 use Nextras\Datagrid\Datagrid;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Entity\IEntity;
 use Tracy\Debugger;
 
 final class PatientPresenter extends AdminPresenter
@@ -24,7 +35,7 @@ final class PatientPresenter extends AdminPresenter
 	protected function createComponentPatientGrid(): Datagrid
 	{
 		$grid = new Datagrid();
-		$grid->addColumn('id', '');
+		$grid->addColumn('id', ' ');
 		$grid->addColumn('surname', 'Příjmení')->enableSort(Datagrid::ORDER_ASC);
 		$grid->addColumn('name', 'Jméno')->enableSort();
 		$grid->addColumn('rc', 'Rodné číslo')->enableSort();
@@ -76,11 +87,31 @@ final class PatientPresenter extends AdminPresenter
 		return $patients;
 	}
 
-	public function renderView($id)
+	/**
+	 * @param int $id
+	 * @param bool $edit
+	 */
+	public function renderView(int $id, bool $edit = false)
 	{
 		$patient = $this->orm->persons->getById($id);
 		$this->template->person = $patient;
 		$this->template->request = $patient->visitRequest;
+		$this->template->edit = $edit;
+
+		if ($edit){
+			$this['patientForm']->setDefaults($patient->toArray(IEntity::TO_ARRAY_RELATIONSHIP_AS_ID));
+		}
+	}
+
+	public function actionDelete(int $id){
+		$person = $this->orm->persons->getById($id);
+		$this->orm->remove($person);
+		$this->orm->flush();
+
+		$this->flashMessage('Pacient byl smazán');
+		$this->redirect('default');
+	}
+
 	/**
 	 * @return Form
 	 */
@@ -116,6 +147,70 @@ final class PatientPresenter extends AdminPresenter
 
 		return $form;
 	}
+
+	/**
+	 * @param $personId
+	 * @param $groupId
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionGroupLogOut($personId, $groupId)
+	{
+		$group = $this->orm->groups->getById($groupId);
+		$patient = $this->orm->persons->getById($personId);
+		$group->persons->remove($patient);
+
+		$this->orm->persistAndFlush($group);
+
+		$this->flashMessage('Pacient byl odebrán ze skupiny');
+		$this->redirect('Patient:view', $personId);
+
+	}
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentGroupForm(): Form
+	{
+		$id = $this->getParameter('id');
+		$person = $this->orm->persons->getById($id);
+		$groups = $this->orm->groups->findBy(['id!=' => $person->groups->get()->fetchPairs(NULL, 'id')])
+			->orderBy('title');
+
+		$formfactory = new GroupLogInFormFactory($groups);
+		$form = $formfactory->create();
+
+		unset($form['password']);
+
+		$form->onSuccess[] = function (Form $form) use ($person){
+			$values = $form->getValues();
+			$person->groups->add($values->group);
+			$this->orm->persistAndFlush($person);
+
+			$this->flashMessage('Pacient byl zapsán do skupiny');
+			$this->redirect('view', $person->id);
+		};
+
+		return $form;
+	}
+
+	/**
+	 * @param string|NULL $q
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionSearch(string $q = NULL)
+	{
+		$persons = $this->orm->persons->findByFilter(['surname' => $q]);
+		$data = [];
+
+		foreach ($persons as $person){
+			$data[] = [
+				'id' => $person->id,
+				'title' => $person->fullName . " ($person->mail)",
+			];
+		}
+
+		$this->sendJson($data);
+
 	}
 
 }
