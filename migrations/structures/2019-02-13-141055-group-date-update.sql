@@ -1,0 +1,1 @@
+ALTER TABLE `groups` ADD `date_update` datetime NOT NULL;
