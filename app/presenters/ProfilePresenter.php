@@ -147,6 +147,20 @@ final class ProfilePresenter extends UserPresenter
 
 
 	/**
+	 * @param int $id
+	 * @throws AbortException
+	 */
+	public function actionDeleteVisitRequest()
+	{
+		$visitRequest = $this->person->visitRequest;
+		$this->orm->remove($visitRequest);
+		$this->orm->persistAndFlush($this->person);
+
+		$this->flashMessage('Vaše žádost o vyšetření byla zrušena');
+		$this->redirect('default');
+	}
+
+	/**
 	 * @return Form
 	 */
 	protected function createComponentVisitRequestForm(): Form
@@ -208,7 +222,10 @@ final class ProfilePresenter extends UserPresenter
 	 */
 	public function actionVisitRequest()
 	{
-		if  ($this->person->visitRequest)
-			$this['visitRequestForm']->setDefaults($this->person->visitRequest->toArray());
+		$visitRequest = $this->person->visitRequest;
+		$this->template->visitRequest = $visitRequest;
+
+		if  ($visitRequest)
+			$this['visitRequestForm']->setDefaults($visitRequest->toArray());
 	}
 }

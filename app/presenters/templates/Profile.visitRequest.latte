@@ -6,4 +6,6 @@
 	<p>Vaše žádost automaticky smaže po uplynutí zadané doby nebo pokud si zarezervujete termín. </p>
 
 	{control visitRequestForm}
+
+	<p class="center" n:if="$visitRequest">🗙 <a n:href="deleteVisitRequest">Zrušit žádost</a></p>
 {/block}
