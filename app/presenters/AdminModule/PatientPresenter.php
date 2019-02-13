@@ -81,6 +81,41 @@ final class PatientPresenter extends AdminPresenter
 		$patient = $this->orm->persons->getById($id);
 		$this->template->person = $patient;
 		$this->template->request = $patient->visitRequest;
+	/**
+	 * @return Form
+	 */
+	protected function createComponentPatientForm(): Form
+	{
+		$form = PatientFormFactory::create();
+
+		/** @var TextInput $phoneField */
+		$phoneField = $form['phone'];
+		$phoneField->setRequired(FALSE);
+		$phoneField->setNullable();
+
+		$form->addTextArea('note', 'Poznámka:')
+			->setNullable();
+
+		$form->addSubmit('ok', 'OK');
+
+		$form->onSuccess[] = function (Form $form, ArrayHash $values){
+			$person = $this->orm->persons->getById($this->getParameter('id'));
+
+			$person->surname = $values->surname;
+			$person->name = $values->name;
+			$person->phone = $values->phone;
+			$person->mail = $values->mail;
+			$person->rc = $values->rc;
+			$person->address = $values->address;
+			$person->note = $values->note;
+
+			$this->orm->persons->persistAndFlush($person);
+			$this->flashMessage('Údaje pacienta byly uloženy');
+			$this->redirect('view', $person->id);
+		};
+
+		return $form;
+	}
 	}
 
 }

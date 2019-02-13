@@ -10,7 +10,7 @@ namespace App\Presenters;
 
 use App\Forms\GroupLogInFormFactory;
 use App\Forms\PasswordFormFactory;
-use App\Forms\UserFormFactory;
+use App\Forms\PatientFormFactory;
 use App\Forms\VisitRequestFormFactory;
 use App\Model\Orm\VisitRequest;
 use Nette\Application\AbortException;
@@ -36,32 +36,23 @@ final class ProfilePresenter extends UserPresenter
 	 */
 	protected function createComponentUserForm(): Form
 	{
-		$form = UserFormFactory::create();
-
-		$form->addText('address', 'Adresa:', 40)
-			->setNullable();
-
-		$form->addText('rc', 'Rodné číslo:', 11)
-			->setAttribute('placeholder', '______/____')
-			->setOption('description', '(000000/0000)')
-			->setNullable()
-			->addCondition(Form::FILLED)
-				->addRule(Form::PATTERN, 'Jste si jistí rodným číslem?', '[0-9]{2}[0156][0-9][0-3][0-9]/[0-9]{3,4}');
+		$form = PatientFormFactory::create();
 
 		$form->addSubmit('ok', 'OK');
 
-		$form->onValidate[] = function (Form $form)
+		$form->onValidate[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
-
 			$person = $this->orm->persons->getByMail($values->mail);
 			if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším emailem!');
+
+			if ($values->rc){
+				$person = $this->orm->persons->getByRc($values->rc);
+				if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším rodným číslem!');
+			}
 		};
 
-		$form->onSuccess[] = function (Form $form)
+		$form->onSuccess[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
-
 			$person = $this->person;
 			$person->name = $values->name;
 			$person->surname = $values->surname;
@@ -72,7 +63,7 @@ final class ProfilePresenter extends UserPresenter
 
 			$this->orm->persistAndFlush($person);
 
-			$this->flashMessage('Profil uložen');
+			$this->flashMessage('Profil byl uložen');
 			$this->redirect('default');
 		};
 
@@ -117,12 +108,11 @@ final class ProfilePresenter extends UserPresenter
 		])
 			->orderBy('title');
 
-		$formfactory = new GroupLogInFormFactory($groups);
+		$formFactory = new GroupLogInFormFactory($groups);
 
-		$form = $formfactory->create();
+		$form = $formFactory->create();
 
-		$form->onValidate[] = function (Form $form){
-			$values = $form->getValues();
+		$form->onValidate[] = function (Form $form, ArrayHash $values){
 			$group = $this->orm->groups->getById($values->group);
 
 			if (!Passwords::verify($values->password, $group->password)){
@@ -208,7 +198,6 @@ final class ProfilePresenter extends UserPresenter
 		$pdf = new \FPDM(__DIR__.'/templates/form.pdf');
 		$pdf->Load($fields, true);
 		$pdf->Merge();
-
 
 		$pdf->Output('D', $this->person->fullName.'.pdf');
 	}

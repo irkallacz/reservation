@@ -13,7 +13,6 @@ use App\Forms\RecoverPasswordFormFactory;
 use App\Forms\SignFormFactory;
 use App\Forms\UserFormFactory;
 use App\Model\Email;
-use App\Model\Orm\Admin;
 use App\Model\Orm\Person;
 use App\Model\UserAuthenticator;
 use Nette\Application\UI\Form;
@@ -22,6 +21,7 @@ use Nette\Mail\Message;
 use Nette\Mail\SendException;
 use Nette\Security\AuthenticationException;
 use Nette\Security\Passwords;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\Html;
 use Nette\Utils\Random;
 
@@ -82,26 +82,22 @@ final class SignPresenter extends BasePresenter
 	{
 		$form = UserFormFactory::create();
 
-		$form->addCheckbox('check', Html::el()->setHtml('Souhlasím s <a href="souhlas">zpracováním osobních údajů'))
+
+		$form->addCheckbox('check', Html::el()->setHtml('Souhlasím se <a href="souhlas">zpracováním osobních údajů</a>'))
 			->setOmitted()
 			->setRequired('Musíte souhlasit se zpracováním osobních údajů')
 			->setDefaultValue(TRUE);
 
-		$form->onValidate[] = function (Form $form)
+		$form->addSubmit('ok', 'OK');
+
+		$form->onValidate[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
-
-//			$person = $this->orm->persons->getByRc($values->rc);
-//			if ($person) $form->addError('V databázi se již nachází osoba s Vaším rodným číslem!');
-
 			$person = $this->orm->persons->getByMail($values->mail);
 			if ($person) $form->addError('V databázi se již nachází osoba s Vaším emailem!');
 		};
 
-		$form->onSuccess[] = function (Form $form)
+		$form->onSuccess[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
-
 			$password = Random::generate(8);
 
 			$person = new Person();
@@ -109,8 +105,6 @@ final class SignPresenter extends BasePresenter
 			$person->surname = $values->surname;
 			$person->mail = $values->mail;
 			$person->phone = $values->phone;
-//			$person->rc = $values->rc;
-//			$person->address = $values->address;
 			$person->password = Passwords::hash($password);
 			$person->dateUpdate = new \DateTime();
 			$this->orm->persistAndFlush($person);
@@ -145,9 +139,8 @@ final class SignPresenter extends BasePresenter
 	{
 		$form = RecoverPasswordFormFactory::create();
 
-		$form->onValidate[] = function (Form $form)
+		$form->onValidate[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
 			$person = $this->orm->persons->getByMail($values->mail);
 
 			if (!$person) {
@@ -155,9 +148,8 @@ final class SignPresenter extends BasePresenter
 			}
 		};
 
-		$form->onSuccess[] = function (Form $form)
+		$form->onSuccess[] = function (Form $form, ArrayHash $values)
 		{
-			$values = $form->getValues();
 			$password = Random::generate(8);
 
 			$person = $this->orm->persons->getByMail($values->mail);

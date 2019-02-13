@@ -34,25 +34,12 @@ final class UserFormFactory
 			->setRequired('Vyplňte prosím jméno')
 			->addFilter(['\Nette\Utils\Strings', 'firstUpper']);
 
-//		$form->addCheckbox('skipControl', 'bez kontroly RČ')
-//			->setOmitted()
-//			->setDefaultValue(FALSE);
-//
-//		$form->addText('rc', 'Rodné čílo:', 11)
-//			->setAttribute('placeholder', '______/____')
-//			->setOption('description', '(000000/0000)')
-//			->setRequired('Vyplňte prosím rodné číslo')
-//			->addConditionOn($form['skipControl'], Form::EQUAL, FALSE)
-//				->addRule(Form::PATTERN, 'Jste si jistí rodným číslem?', '[0-9]{2}[0156][0-9][0-3][0-9]/[0-9]{3,4}');
-
-//		$form->addText('address', 'Adresa:', 40)
-//			->setRequired('Vyplňte prosím adresu');
-
 		$form->addText('phone', 'Telefon:', 9, 9)
 			->setType('tel')
 			->setRequired('Vyplňte prosím telefon')
 			->addCondition(Form::FILLED)
-			->addRule(Form::LENGTH, 'Telefon musí mít %d číslic', 9);
+			->addRule(Form::INTEGER, 'Telefonní číslo musí být složeno z číslic')
+			->addRule(Form::LENGTH, 'Telefonní číslo musí mít %d číslic', 9);
 
 		$form->addText('mail', 'E-mail:', 40)
 			->setType('email')
