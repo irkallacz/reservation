@@ -9,18 +9,50 @@
 namespace App\Presenters;
 
 use Nette\Application\BadRequestException;
+use Nette\Utils\ArrayHash;
+use Nextras\Dbal\Connection;
+use Tracy\Debugger;
 
 final class CalendarPresenter extends BasePresenter
 {
-    public function actionDefault($password){
+	/**
+	 * @var Connection @inject
+	 */
+	public $dbal;
+
+	/**
+	 * @param string $password
+	 * @throws BadRequestException
+	 */
+	public function actionDefault(string $password)
+    {
         if ($password != 'ZxnKLplCs'){
             throw new BadRequestException();
         }
     }
 
-    public function renderDefault($password){
-		$visits = $this->orm->visits->findBy(['open' => FALSE]);
+	/**
+	 * @param string $password
+	 * @throws \Nextras\Dbal\QueryException
+	 */
+	public function renderDefault(string $password)
+    {
+		$visits = $this->orm->visits->findBy(['this->person!=' => NULL]);
         $this->template->visits = $visits;
         $this->template->date = new \DateTime;
+
+		$groups = $this->dbal->query('SELECT DISTINCT [title], DATE([date_start])AS [day] FROM [visits] JOIN [groups] ON [groups.id] = [group_id] WHERE [group_id] IS NOT NULL ORDER BY [date_start]')
+			->fetchPairs('day', 'title');
+
+		$days = [];
+		foreach ($groups as $date => $group){
+			$date = new \DateTimeImmutable($date);
+			$day = $date->format('Y-m-d');
+			$days[$day]['start'] = $date->format('Ymd');
+			$days[$day]['end'] = $date->modify('+ 1 day')->format('Ymd');
+			$days[$day]['group'] = $group;
+		}
+
+		$this->template->days = ArrayHash::from($days);
     }
 }

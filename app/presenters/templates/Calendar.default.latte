@@ -22,17 +22,27 @@ END:STANDARD
 END:VTIMEZONE
 {foreach $visits as $visit}
 BEGIN:VEVENT
-UID:{$visit->date_start|date:'ymdHi'}
+UID:{$visit->dateStart|date:'ymdHi'}
 DTSTART;TZID=Europe/Prague:{$visit->dateStart|date:'Ymd\THis'}
 DTEND;TZID=Europe/Prague:{$visit->dateEnd|date:'Ymd\THis'}
 DTSTAMP;TZID=Europe/Prague:{$visit->dateUpdate|date:'Ymd\THis'}
 LAST-MODIFIED;TZID=Europe/Prague:{$visit->dateUpdate|date:'Ymd\THis'}
-SUMMARY:{$visit->person->fullName} - {$visit->group->title}
+SUMMARY:{$visit->person->fullName}{if $visit->group} - {$visit->group->title}{/if}
 CLASS:PUBLIC
 CATEGORIES:{$visit->typeTitle}
 TRANSP:OPAQUE
 X-SOGO-SEND-APPOINTMENT-NOTIFICATIONS:NO
-DESCRIPTION:{$visit->typeTitle}\n {$visit->group->title}\n {$visit->$person->mail|lower}\n {$visit->person->adress}\n {$visit->person->rc}
+DESCRIPTION:{$visit->typeTitle}\n {if $visit->group}{$visit->group->title}\n{/if} {$visit->person->mail}\n {$visit->person->phone}\n {$visit->person->address}\n {$visit->person->rc}
+END:VEVENT
+{/foreach}
+{foreach $days as $day}
+BEGIN:VEVENT
+UID:{$day->start}-{$day->group|webalize}
+DTSTART;VALUE=DATE:{$day->start}
+DTEND;VALUE=DATE:{$day->end}
+SUMMARY:{$day->group}
+CLASS:PUBLIC
+TRANSP:OPAQUE
 END:VEVENT
 {/foreach}
 END:VCALENDAR
