@@ -21,7 +21,7 @@
 		"latte/latte": "^2.4",
 		"tracy/tracy": "^2.4",
 		"nextras/migrations": "^3.0",
-		"nextras/orm": "^2.2",
+		"nextras/orm": "v2.3.x-dev",
 		"nextras/mail-panel": "^2.3",
 		"contributte/console": "^0.2.0",
 		"nextras/forms": "^2.0",
