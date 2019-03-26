@@ -9,7 +9,6 @@
 namespace App\AdminModule\Presenters;
 
 use Nette\Forms\Container;
-use Nette\Forms\Form;
 use Nextras\Datagrid\Datagrid;
 use Nextras\Orm\Collection\ICollection;
 
@@ -35,9 +34,36 @@ final class VolunteerPresenter extends AdminPresenter
 
 		$grid->setFilterFormFactory(function() {
 			$form = new Container();
-			$form->addCheckbox('active')->setDefaultValue(TRUE);
+			$form->addSelect('active', NULL, ['✘', '✔'])
+				->setPrompt(NULL);
 
 			return $form;
+		});
+
+		$grid->addGlobalAction('delete', 'Delete', function (array $ids) {
+			if (count($ids)){
+				foreach ($ids as $id) {
+					$visitRequest = $this->orm->visitRequests->getById($id);
+					$this->orm->remove($visitRequest);
+				}
+				$this->orm->flush();
+				$this->flashMessage('Bylo smazáno '.count($ids).' žádostí');
+			}else{
+				$this->flashMessage('Musíte vybrat žádost', 'error');
+			}
+		});
+
+		$grid->addGlobalAction('change', 'Change', function (array $ids) {
+			if (count($ids)){
+				foreach ($ids as $id) {
+					$visitRequest = $this->orm->visitRequests->getById($id);
+					$visitRequest->active = !$visitRequest->active;
+					$this->orm->persistAndFlush($visitRequest);
+				}
+				$this->flashMessage('Bylo změněno '.count($ids).' žádostí');
+			}else{
+				$this->flashMessage('Musíte vybrat žádost', 'error');
+			}
 		});
 
 		$grid->addCellsTemplate(__DIR__ . '/templates/volunteer-grid.latte');
