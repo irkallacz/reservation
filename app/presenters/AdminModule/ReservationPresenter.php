@@ -31,7 +31,7 @@ final class ReservationPresenter extends AdminPresenter {
 	 * @param int $year
 	 * @param int $week
 	 */
-	public function renderDefault(int $year = NULL, int $week = NULL) {
+	public function renderDefault(string $year = NULL, string $week = NULL) {
 		if (is_null($year)) $year = intval(date('Y'));
 		if (is_null($week)) $week = intval(date('W'));
 
