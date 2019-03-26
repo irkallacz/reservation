@@ -16,17 +16,19 @@ final class VisitRequestsMapper extends Mapper
 {
 	/**
 	 * @param array $filter
-	 * @return QueryBuilder|ICollection
+	 * @return QueryBuilder
 	 */
-	public function findByFilter($filter)
+	public function findByFilter($filter): QueryBuilder
 	{
 		$query = $this->builder();
 
 		foreach($filter as $condition => $value)
-			if (is_bool($value))
+			if ($condition === 'active') {
+				$value = boolval($value);
 				$query->andWhere('%column = %b', $condition, $value);
-			else
+			} else {
 				$query->andWhere('%column LIKE %like_', $condition, $value);
+			}
 
 		return $query;
 	}
