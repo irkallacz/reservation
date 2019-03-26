@@ -57,7 +57,7 @@
             <tr>
 				<td><a n:href="Patient:view $person->id">{$person->fullName}</a></td>
                 <td>{$person->mail}</td>
-                <td>{$person->phone|number:0:'':' '}</td>
+                <td>{if $person->phone}{$person->phone|number:0:'':' '}{/if}</td>
                 <td>
 					{var $term = $person->getLastVisit()}
 					{if $term}
