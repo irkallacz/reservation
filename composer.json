@@ -30,7 +30,8 @@
 		"tmw/fpdm": "^2.9"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0"
+		"nette/tester": "^2.0",
+		"mrtnzlml/testbench": "^2.5"
 	},
 	"minimum-stability": "stable",
 	"config": {

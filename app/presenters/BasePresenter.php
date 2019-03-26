@@ -10,6 +10,7 @@ namespace App\Presenters;
 
 use App\Model\Orm;
 use Nette\Application\UI\Presenter;
+use Tracy\Debugger;
 
 /**
  * @property-read \Nette\Bridges\ApplicationLatte\Template|\stdClass $template
@@ -21,8 +22,8 @@ abstract class BasePresenter extends Presenter
 
 	public function checkRequirements($element)
 	{
-		parent::checkRequirements($element);
 		$this->getUser()->getStorage()->setNamespace('user');
+		parent::checkRequirements($element);
 	}
 
 }

@@ -1,0 +1,12 @@
+session:
+	autoStart: true
+	savePath: '%tempDir%/sessions'
+	expiration: 14 days
+
+console:
+	catchExceptions: true
+	autoExit: false
+
+testbench:
+	sqls: #what should be loaded after empty database creation
+		- %appDir%/../migrations/tests/tests.sql
