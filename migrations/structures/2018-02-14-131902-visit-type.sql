@@ -1,1 +1,0 @@
-ALTER TABLE `visits` ADD `type` tinyint unsigned NOT NULL DEFAULT '1' AFTER `person_id`;

@@ -1,1 +1,0 @@
-ALTER TABLE `persons` ADD `phone` varchar(9) COLLATE 'utf8_czech_ci' NOT NULL AFTER `mail`;

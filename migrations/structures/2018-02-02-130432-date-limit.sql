@@ -1,1 +1,0 @@
-ALTER TABLE `visits` CHANGE `date_login` `date_limit` datetime NULL AFTER `date_update`;

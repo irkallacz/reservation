@@ -1,1 +1,0 @@
-ALTER TABLE `visits` ADD `note` text NULL;

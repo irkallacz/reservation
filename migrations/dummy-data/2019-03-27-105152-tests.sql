@@ -5,6 +5,12 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+TRUNCATE `visits`;
+TRUNCATE `groups_x_persons`;
+TRUNCATE `persons`;
+TRUNCATE `groups`;
+TRUNCATE `admins`;
+
 INSERT INTO `admins` (`id`, `name`, `surname`, `mail`, `password`, `date_update`, `liane`) VALUES
 	(1,	'Tomáš',	'Admin',	'tomas.admin@gmail.cz',	'$2y$10$Qe6X1k4XO4qaRJ96xD7Oo.LFgFe41XkxQYIu6E9TxucqurWKRWNFy',	NOW(),	0);
 
