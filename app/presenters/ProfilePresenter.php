@@ -14,6 +14,7 @@ use App\Forms\PatientFormFactory;
 use App\Forms\VisitRequestFormFactory;
 use App\Model\Orm\VisitRequest;
 use Nette\Application\AbortException;
+use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Form;
 use Nette\Security\Passwords;
 use Nette\Utils\ArrayHash;
@@ -134,15 +135,22 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 * @param int $id
 	 * @throws AbortException
+	 * @throws ForbiddenRequestException
 	 */
 	public function actionGroupLogOut(int $id)
 	{
 		$group = $this->orm->groups->getById($id);
-		$group->persons->remove($this->person);
-		$this->orm->persistAndFlush($group);
 
-		$this->flashMessage('Byl jste odebrán ze skupiny');
-		$this->redirect('default');
+		if ($this->person->groups->has($group)){
+			$group->persons->remove($this->person);
+
+			$this->orm->persistAndFlush($group);
+
+			$this->flashMessage('Byl jste odebrán ze skupiny');
+			$this->redirect('default');
+		} else {
+			throw new ForbiddenRequestException('V této skupině nejste zapsán');
+		}
 	}
 
 
