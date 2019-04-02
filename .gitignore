@@ -4,9 +4,6 @@
 /.idea
 /tests/_temp
 
-/migrations/basic-data/*
-/migrations/dummy-data/*
-
 app/config/config.local.neon
 app/config/config.local.neon.production
 composer.lock
