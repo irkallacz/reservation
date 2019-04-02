@@ -1,12 +1,12 @@
-session:
-	autoStart: true
-	savePath: '%tempDir%/sessions'
-	expiration: 14 days
+dbal:
+	database: rezervace_tests
 
-console:
-	catchExceptions: true
-	autoExit: false
+services:
+	nette.mailer:
+		class: Nette\Mail\IMailer
+		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
 
 testbench:
 	sqls: #what should be loaded after empty database creation
-		- %appDir%/../migrations/tests/tests.sql
+		#- %appDir%/../migrations/structures/2019-03-27-105054-rezervace.sql
+		#- %appDir%/../migrations/dummy-data/2019-03-27-105152-tests.sql

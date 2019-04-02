@@ -12,6 +12,5 @@ Testbench\Bootstrap::setup(__DIR__ . '/_temp', function (\Nette\Configurator $co
 	]);
 
 	$configurator->addConfig(__DIR__ . '/../app/config/config.neon');
-	$configurator->addConfig(__DIR__ . '/../app/config/config.neon');
 	$configurator->addConfig(__DIR__ . '/tests.neon');
 });
