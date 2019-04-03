@@ -1,4 +1,5 @@
 parameters:
+	calendarPassword: iZ2LrcLnQ9
 
 dbal:
 	driver: mysqli
@@ -54,6 +55,8 @@ services:
 	adminAuthenticator:
 		factory: App\Model\AdminAuthenticator
 		autowired: self
+
+	- App\Presenters\CalendarPresenter(%calendarPassword%)
 
 	- App\Console\VisitReminderCommand
 	- App\Console\VisitRequestCommand

@@ -21,12 +21,27 @@ final class CalendarPresenter extends BasePresenter
 	public $dbal;
 
 	/**
+	 * @var string
+	 */
+	private $password;
+
+	/**
+	 * CalendarPresenter constructor.
+	 * @param string $password
+	 */
+	public function __construct(string $password)
+	{
+		parent::__construct();
+		$this->password = $password;
+	}
+
+	/**
 	 * @param string $password
 	 * @throws BadRequestException
 	 */
 	public function actionDefault(string $password)
     {
-        if ($password != 'ZxnKLplCs'){
+        if ($password != $this->password){
             throw new BadRequestException();
         }
     }
