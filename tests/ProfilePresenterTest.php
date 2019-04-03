@@ -5,7 +5,7 @@ require __DIR__ . '/bootstrap.php';
 /**
  * @testCase
  */
-class ProfilePresenterTest extends \Tester\TestCase
+final class ProfilePresenterTest extends \Tester\TestCase
 {
 
 	use \Testbench\TPresenter;
@@ -30,7 +30,7 @@ class ProfilePresenterTest extends \Tester\TestCase
 		$this->checkForm('Profile:edit', 'userForm', [
 			'name' => 'Tomáš',
 			'surname' => 'Blbý',
-			'rc' => '123456/0000',
+			'rc' => '101010/00008',
 			'mail' => 'tomas.blby@centrum.cz',
 			'phone' => '609112777',
 			'adress' => 'Horni dolní',
@@ -67,6 +67,12 @@ class ProfilePresenterTest extends \Tester\TestCase
 	public function testActionWrongGroupLogOut()
 	{
 		$this->checkAction('Profile:groupLogOut', ['id' => 2]);
+	}
+
+
+	public function testActionVisitRequest()
+	{
+		$this->checkAction('Profile:visitRequest');
 	}
 
 }

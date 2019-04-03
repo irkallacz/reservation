@@ -5,7 +5,7 @@ require __DIR__ . '/bootstrap.php';
 /**
  * @testCase
  */
-class ReservationPresenterTest extends \Tester\TestCase
+final class ReservationPresenterTest extends \Tester\TestCase
 {
 
 	use \Testbench\TPresenter;
