@@ -35,7 +35,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property DateTimeImmutable      $dateUpdate		{default now}
 
  * @property VisitRequest|null  	$visitRequest	{1:1 VisitRequest::$person}
- * @property OneHasMany|Visit[]		$visits			{1:m Visit::$person, orderBy=[dateStart=ASC]}
+ * @property OneHasMany|Visit[]		$visits			{1:m Visit::$person, orderBy=[dateStart=DESC]}
 
  * @property-read string      		$fullName 		{virtual}
  */
@@ -64,7 +64,7 @@ final class Person extends Entity
 	 */
 	public function getLastVisit()
 	{
-		return $this->visits->get()->orderBy('dateStart', Collection::DESC)->fetch();
+		return $this->visits->get()->fetch();
 	}
 
 }
