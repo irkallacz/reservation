@@ -18,7 +18,7 @@ final class CalendarPresenterTest extends \Tester\TestCase
 		$this->checkAction('Calendar:default');
 	}
 
-	public function testRenderDefaultPassword()
+	public function testRenderDefaultWithPassword()
 	{
 		$this->checkAction('Calendar:default', ['password' => 'iZ2LrcLnQ9']);
 	}
