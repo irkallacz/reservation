@@ -28,13 +28,13 @@
 
 	<p>✔ <a n:href="groupLogIn">Zapsat se do skupiny</a></p>
 
-	<h2>Žádosti o prohlídku</h2>
-	{if $request}
-		<p n:class="$request->active ? old">{$request->active ? Aktivní : Neaktiví} žádost na vyšetření od {$request->dateStart|date:'d.m.Y'} do {$request->dateEnd|date:'d.m.Y'}
-			ve dnech: {$request->getDaysInString()}. <a n:href="visitRequest">Upravit žádost</a>.</p>
-	{else}
-		<p>Nenašli jste volný termín který by vám vyhovoval? Zaregistrujte si <a n:href="visitRequest">žádost o prohlídku</a>.</p>
-	{/if}
+	{*<h2>Žádosti o prohlídku</h2>*}
+	{*{if $request}*}
+		{*<p n:class="$request->active ? old">{$request->active ? Aktivní : Neaktiví} žádost na vyšetření od {$request->dateStart|date:'d.m.Y'} do {$request->dateEnd|date:'d.m.Y'}*}
+			{*ve dnech: {$request->getDaysInString()}. <a n:href="visitRequest">Upravit žádost</a>.</p>*}
+	{*{else}*}
+		{*<p>Nenašli jste volný termín který by vám vyhovoval? Zaregistrujte si <a n:href="visitRequest">žádost o prohlídku</a>.</p>*}
+	{*{/if}*}
 
 	<h2>Vaše <a n:href="Reservation:default">rezervace</a></h2>
 	<ol n:inner-foreach="$person->visits as $visit">
