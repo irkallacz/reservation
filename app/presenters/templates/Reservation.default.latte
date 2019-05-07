@@ -19,7 +19,7 @@
 
     {if $term}
         <p>Aktuálně máte rezervovaný termín na <b>{$term->dateStart|date:'%A %d.%m.%Y v %H:%M'|lower}</b>.</p>
-        <p n:if="($term->canLogOut)" class="center">🗙 <a n:href="logOut">Zrušit tento termín</a></p>
+        <p n:if="($term->canLogOut)" class="center">🗙 <a n:href="logOut" class="confirm" data-message="Opravdu se chcete odhlásit z Vašeho termínu?">Zrušit tento termín</a></p>
 
 		<h2>Detaily vyšetření</h2>
 		<p>Pokud chtete upřesnit <a href="https://sportovnimedicina.tul.cz/sluzby" target="_blank">typ vyšetření</a> nebo zanechat nějakou poznámku, můžete je vyplnit níže.</p>
@@ -57,8 +57,6 @@
         </div>
     {/foreach}
     </div>
-
-	<script type="application/javascript" src="{$basePath}/js/confirm.js"></script>
 
 	{if}
 	<h2>Vaše skupiny</h2>
