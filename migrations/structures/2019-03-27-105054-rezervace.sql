@@ -36,18 +36,6 @@ CREATE TABLE `groups_x_persons` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 
-CREATE TABLE `migrations` (
-	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`group` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-	`file` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-	`checksum` char(32) COLLATE utf8_czech_ci NOT NULL,
-	`executed` datetime NOT NULL,
-	`ready` tinyint(1) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`),
-	UNIQUE KEY `type_file` (`group`,`file`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-
 CREATE TABLE `persons` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`name` varchar(30) COLLATE utf8_czech_ci NOT NULL,
