@@ -35,25 +35,23 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 * @return Form
 	 */
-	protected function createComponentUserForm(): Form
+	protected function createComponentUserForm():Form
 	{
 		$form = PatientFormFactory::create();
 
 		$form->addSubmit('ok', 'OK');
 
-		$form->onValidate[] = function (Form $form, ArrayHash $values)
-		{
+		$form->onValidate[] = function (Form $form, ArrayHash $values) {
 			$person = $this->orm->persons->getByMail($values->mail);
-			if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším emailem!');
+			if (($person) and ($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším emailem!');
 
-			if ($values->rc){
+			if ($values->rc) {
 				$person = $this->orm->persons->getByRc($values->rc);
-				if (($person)and($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším rodným číslem!');
+				if (($person) and ($person !== $this->person)) $form->addError('V databázi se již nachází osoba s Vaším rodným číslem!');
 			}
 		};
 
-		$form->onSuccess[] = function (Form $form, ArrayHash $values)
-		{
+		$form->onSuccess[] = function (Form $form, ArrayHash $values) {
 			$person = $this->person;
 			$person->name = $values->name;
 			$person->surname = $values->surname;
@@ -74,11 +72,11 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 * @return Form
 	 */
-	protected function createComponentPasswordForm(): Form
+	protected function createComponentPasswordForm():Form
 	{
 		$form = PasswordFormFactory::create();
 
-		$form->onSuccess[] = function (Form $form, ArrayHash $values){
+		$form->onSuccess[] = function (Form $form, ArrayHash $values) {
 			$this->person->password = Passwords::hash($values->password);
 			$this->orm->persons->persistAndFlush($this->person);
 
@@ -101,7 +99,7 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 * @return Form
 	 */
-	protected function createComponentGroupForm(): Form
+	protected function createComponentGroupForm():Form
 	{
 		$groups = $this->orm->groups->findBy([
 			'active' => TRUE,
@@ -113,15 +111,15 @@ final class ProfilePresenter extends UserPresenter
 
 		$form = $formFactory->create();
 
-		$form->onValidate[] = function (Form $form, ArrayHash $values){
+		$form->onValidate[] = function (Form $form, ArrayHash $values) {
 			$group = $this->orm->groups->getById($values->group);
 
-			if (!Passwords::verify($values->password, $group->password)){
+			if (!Passwords::verify($values->password, $group->password)) {
 				$form->addError('Nesprávné heslo skupiny');
 			}
 		};
 
-		$form->onSuccess[] = function (Form $form, ArrayHash $values){
+		$form->onSuccess[] = function (Form $form, ArrayHash $values) {
 			$this->person->groups->add($values->group);
 			$this->orm->persistAndFlush($this->person);
 
@@ -141,7 +139,7 @@ final class ProfilePresenter extends UserPresenter
 	{
 		$group = $this->orm->groups->getById($id);
 
-		if ($this->person->groups->has($group)){
+		if ($this->person->groups->has($group)) {
 			$group->persons->remove($this->person);
 
 			$this->orm->persistAndFlush($group);
@@ -171,18 +169,17 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 * @return Form
 	 */
-	protected function createComponentVisitRequestForm(): Form
+	protected function createComponentVisitRequestForm():Form
 	{
 		$form = VisitRequestFormFactory::create();
 
-		$form->onSuccess[] = function (Form $form)
-		{
+		$form->onSuccess[] = function (Form $form) {
 			$values = $form->getValues();
 
-			if  ($this->person->visitRequest) {
+			if ($this->person->visitRequest) {
 				$visitRequest = $this->person->visitRequest;
 
-			}else {
+			} else {
 				$visitRequest = new VisitRequest();
 				$visitRequest->person = $this->person;
 			}
@@ -205,7 +202,8 @@ final class ProfilePresenter extends UserPresenter
 	/**
 	 *
 	 */
-	public function actionPersonalForm() {
+	public function actionPersonalForm()
+	{
 		$fields = [
 			'fullName' => $this->person->fullName,
 			'rc' => $this->person->rc,
@@ -217,11 +215,11 @@ final class ProfilePresenter extends UserPresenter
 			$fields['dateVisit'] = $this->person->getNextVisit()->dateStart->format('d. m. Y');
 		}
 
-		$pdf = new \FPDM(__DIR__.'/templates/form.pdf');
+		$pdf = new \FPDM(__DIR__ . '/templates/form.pdf');
 		$pdf->Load($fields, true);
 		$pdf->Merge();
 
-		$pdf->Output('D', $this->person->fullName.'.pdf');
+		$pdf->Output('D', $this->person->fullName . '.pdf');
 	}
 
 
@@ -233,7 +231,7 @@ final class ProfilePresenter extends UserPresenter
 		$visitRequest = $this->person->visitRequest;
 		$this->template->visitRequest = $visitRequest;
 
-		if  ($visitRequest)
+		if ($visitRequest)
 			$this['visitRequestForm']->setDefaults($visitRequest->toArray());
 	}
 }

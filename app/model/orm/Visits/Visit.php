@@ -44,7 +44,7 @@ final class Visit extends Entity
 	const TYPE_ECG  	= 1;
 	const TYPE_SPIRO  	= 2;
 
-	protected  function getterTypeTitle(): string
+	protected function getterTypeTitle(): string
 	{
 		return ($this->type == self::TYPE_SPIRO) ? 'Funkční vyšetření' : 'Sportovní prohlídka';
 	}
