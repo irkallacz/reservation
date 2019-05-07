@@ -1,12 +1,4 @@
-dbal:
-	database: rezervace_tests
-
 services:
 	nette.mailer:
 		class: Nette\Mail\IMailer
 		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
-
-testbench:
-	sqls: #what should be loaded after empty database creation
-		#- %appDir%/../migrations/structures/2019-03-27-105054-rezervace.sql
-		#- %appDir%/../migrations/dummy-data/2019-03-27-105152-tests.sql
