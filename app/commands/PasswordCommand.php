@@ -33,7 +33,7 @@ final class PasswordCommand extends Command {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
-		$password = $input->getArgument('password');
+		$password = trim($input->getArgument('password'));
 		$output->writeln(Passwords::hash($password));
 	}
 }

@@ -18,7 +18,7 @@ final class SignPresenterTest extends \Tester\TestCase
 	public function testSignForm(){
 		$this->checkForm('Sign:default', 'signForm', [
 			'mail' => 'tomas.blby@centrum.cz',
-			'password' => 'tomas.blby@centrum.cz',
+			'password' => 'tomas.blby',
 		], '/reservation/');
 	}
 

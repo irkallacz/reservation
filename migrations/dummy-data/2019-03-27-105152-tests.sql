@@ -20,10 +20,10 @@ INSERT INTO `groups` (`id`, `title`, `password`, `active`) VALUES
 	(3,	'Skupina 3',	'$2y$10$sc4d8v3JY5Viy/v2LzDJSujXoYGtdI1vxk8r508xn9g/uR6y09UyS',	0);
 
 INSERT INTO `persons` (`id`, `name`, `surname`, `rc`, `mail`, `phone`, `address`, `password`, `note`, `date_update`) VALUES
-	(1,	'Tomáš',	'Blbý',		'123456/0000',	'tomas.blby@centrum.cz',	'060911277',	'Horni dolní',	'$2y$10$wYD0hipulgje/T2psJlUK..u8AXzDq52KvlyxMiTDhLUitg0W6aU6',	NULL,	NOW()),
-	(2,	'Adam',		'Sádlo',	'123457/0000',	'adam.sadlo@seznam.cz',		'060911278',	'Praha',				'$2y$10$c2nrpLkwOcD9WO1KzeJb0e3cAtPfl4Zrc4sM7AUcyutg.oE68byda',	NULL,	NOW()),
-	(3,	'Petr',		'Tvrdý',	'123458/0000',	'petr.tvrdy@email.cz',		'060911279',	'Liberec',			'$2y$10$c2nrpLkwOcD9WO1KzeJb0e3cAtPfl4Zrc4sM7AUcyutg.oE68byda',	NULL,	NOW()),
-	(4,	'Karel',	'Varel',	'123459/0000',	'karel.varel@szn.cz',			'060911280',	'Benešov',			'$2y$10$c2nrpLkwOcD9WO1KzeJb0e3cAtPfl4Zrc4sM7AUcyutg.oE68byda',	NULL,	NOW());
+	(1,	'Tomáš',	'Blbý',		'120416/0000',	'tomas.blby@centrum.cz',	'160911277',	'Horni dolní',	'$2y$10$K8jeErjP2ES0dcYH2YB/KOREemsTVpQddykU0VqqaY7/o6KXQWuQa',	NULL,	NOW()),
+	(2,	'Adam',		'Sádlo',	'120517/0000',	'adam.sadlo@seznam.cz',		'160911278',	'Praha',				'$2y$10$1E..hE0mW4InwyarmGYNg..8ha.H93WB.bv5EjoR4Z7SHVrTmLyfS',	NULL,	NOW()),
+	(3,	'Petr',		'Tvrdý',	'120618/0000',	'petr.tvrdy@email.cz',		'160911279',	'Liberec',			'$2y$10$Lld8GoJP18lqFAzIAtIJ2ewS7p1CZeJXq2EcaUhCf/wwYOg0MdzBm',	NULL,	NOW()),
+	(4,	'Karel',	'Varel',	'120719/0000',	'karel.varel@atlas.cz',		'160911280',	'Benešov',			'$2y$10$ztdVbwt60th6XCuouHgN6.pFf6i8wIDBgjymOVaqjfYuTmgSFnjMW',	NULL,	NOW());
 
 INSERT INTO `visits` (`id`, `date_start`, `date_end`, `date_update`, `date_limit`, `open`, `group_id`, `person_id`, `type`, `note`) VALUES
 	(1,		'2100-02-01 07:00:00',	'2100-02-01 07:45:00',	NOW(),	'2100-01-20 08:45:00',	1,	1,		NULL,	1,	NULL),

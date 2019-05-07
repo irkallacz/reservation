@@ -45,8 +45,8 @@ final class ProfilePresenterTest extends \Tester\TestCase
 	public function testPasswordForm()
 	{
 		$this->checkForm('Profile:edit', 'passwordForm', [
-			'password' => 'tomas.blby@centrum.cz',
-			'confirm' => 'tomas.blby@centrum.cz',
+			'password' => 'tomas.blby',
+			'confirm' => 'tomas.blby',
 		], '/profile/');
 	}
 
