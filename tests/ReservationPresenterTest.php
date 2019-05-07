@@ -43,7 +43,7 @@ final class ReservationPresenterTest extends \Tester\TestCase
 	 */
 	public function testActionLogInWrong()
 	{
-		$this->checkAction('Reservation:logIn', ['id' => 4]);
+		$this->checkAction('Reservation:logIn', ['id' => 6]);
 	}
 
 }
