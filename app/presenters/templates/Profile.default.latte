@@ -1,6 +1,7 @@
 {block head}
 	<style type="text/css">
 		table th, table td{ text-align: left }
+		.old { color: gray }
 	</style>
 {/block}
 
@@ -23,10 +24,10 @@
 
 	<h2>Vaše skupiny</h2>
 	<ul n:inner-foreach="$person->groups as $group">
-		<li n:class="$group->active ? old">{$group->title} <a n:href="groupLogOut $group->id">Odepsat</a></li>
+		<li>{$group->title} <a n:href="groupLogOut $group->id">Odepsat</a></li>
 	</ul>
 
-	<p>✔ <a n:href="groupLogIn">Zapsat se do skupiny</a></p>
+	<p>👪 <a n:href="groupLogIn">Zapsat se do skupiny</a></p>
 
 	{*<h2>Žádosti o prohlídku</h2>*}
 	{*{if $request}*}
@@ -37,8 +38,8 @@
 	{*{/if}*}
 
 	<h2>Vaše <a n:href="Reservation:default">rezervace</a></h2>
-	<ol n:inner-foreach="$person->visits as $visit">
+	<ul n:inner-foreach="$person->visits as $visit">
 		<li n:class="$visit->isOver ? old">{$visit->dateStart|date:'d.m.Y H:i'} {if !$visit->isOver}<a n:href="Reservation:logOut">Zrušit</a>{/if}</li>
-	</ol>
+	</ul>
 
 {/block}
