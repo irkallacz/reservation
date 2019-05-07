@@ -32,9 +32,8 @@ final class VisitRequestFormFactory
 			->setRequired('Vyplňte datum konce intervalu')
 			->setDefaultValue(new DateTime('+ 8 day'));
 
-		$days = VisitRequest::DAY_NAMES;
-		$form->addCheckboxList('daysArray', 'Jen ve dnech', $days)
-			->setDefaultValue(array_keys($days))
+		$form->addCheckboxList('daysArray', 'Jen ve dnech', VisitRequest::DAY_NAMES)
+			->setDefaultValue(array_keys(VisitRequest::DAY_NAMES))
 			->getSeparatorPrototype()
 			->setName(NULL);
 
