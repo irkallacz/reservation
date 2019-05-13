@@ -20,7 +20,8 @@ final class CalendarPresenterTest extends \Tester\TestCase
 
 	public function testRenderDefaultWithPassword()
 	{
-		$this->checkAction('Calendar:default', ['password' => 'iZ2LrcLnQ9']);
+		$response = $this->check('Calendar:default', ['password' => 'iZ2LrcLnQ9']);
+		\Tester\Assert::type(Nette\Application\Responses\TextResponse::class, $response);
 	}
 
 }
